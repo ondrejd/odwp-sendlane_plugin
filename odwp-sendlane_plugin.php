@@ -76,7 +76,8 @@ class odwpSendlanePlugin {
      */
     public static function get_default_options() {
         return [
-            //...
+            'api_key' => '',
+            'hash_key' => '',
         ];
     }
 
@@ -150,7 +151,30 @@ class odwpSendlanePlugin {
      */
     public static function admin_init() {
         register_setting( self::SLUG, self::SETTINGS_KEY );
-        //...
+
+        $section1 = self::SETTINGS_KEY . '_section_1';
+        add_settings_section(
+                $section1,
+                __( 'Sendlane API' ),
+                [__CLASS__, 'render_settings_section_1'],
+                self::SLUG
+        );
+
+        add_settings_field(
+                'api_key',
+                __( 'API klíč', self::SLUG ),
+                [__CLASS__, 'render_setting_api_key'],
+                self::SLUG,
+                $section1
+        );
+
+        add_settings_field(
+                'hash_key',
+                __( '<em>Hash</em> klíč', self::SLUG ),
+                [__CLASS__, 'render_setting_hash_key'],
+                self::SLUG,
+                $section1
+        );
     }
 
     /**
@@ -207,6 +231,43 @@ class odwpSendlanePlugin {
      */
     public static function enqueue_scripts() {
         //...
+    }
+
+    /**
+     * Renders settings section 1.
+     * @return void
+     */
+    public static function render_settings_section_1() {
+?>
+<p class="description">
+    <?php printf(
+            __( 'Pro přístup ke službě <b>Sendlane</b> potřebujete <abbr title="Application Program Interface">API</abbr> a <em>hash</em> klíč (více na stránce <a href="%s" target="blank">What is an API Key?</a>).', self::SLUG ),
+            'http://help.sendlane.com/knowledgebase/api-key/'
+    ) ?>
+</p>
+<?php
+    }
+
+    /**
+     * Renders input for "api_key" setting.
+     * @return void
+     */
+    public static function render_setting_api_key() {
+        $options = self::get_options();
+?>
+<input type="text" name="odwpsp_settings[api_key]" value="<?= $options['api_key'] ?>" class="regular-text">
+<?php
+    }
+
+    /**
+     * Renders input for "api_key" setting.
+     * @return void
+     */
+    public static function render_setting_hash_key() {
+        $options = self::get_options();
+?>
+<input type="text" name="odwpsp_settings[hash_key]" value="<?= $options['hash_key'] ?>" class="regular-text">
+<?php
     }
 
     /**
