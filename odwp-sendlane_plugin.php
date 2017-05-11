@@ -182,13 +182,30 @@ class odwpSendlanePlugin {
      * @return void
      */
     public static function admin_menu() {
+        add_menu_page(
+                __( 'Sendlane plugin', self::SLUG ),
+                __( 'Sendlane plugin', self::SLUG ),
+                'manage_options',
+                'odwpsp_menu',
+                [__CLASS__, 'render_admin_page_list'],
+                null,
+                100
+        );
+        add_submenu_page(
+                'odwpsp_menu',
+                __( 'Přidat stránku/akci', self::SLUG ),
+                __( 'Přidat stránku', self::SLUG ),
+                'manage_options',
+                'odwpsp_menu_add',
+                [__CLASS__, 'render_admin_page_add']
+        );
         add_options_page(
                 __( 'Nastavení pro Sendlane plugin', self::SLUG ),
                 __( 'Sendlane plugin', self::SLUG ),
                 'manage_options',
-                self::SLUG,
+                self::SLUG . '-options',
                 [__CLASS__, 'admin_options_page']
-            );
+        );
     }
 
     /**
@@ -197,7 +214,11 @@ class odwpSendlanePlugin {
      * @return void
      */
     public static function admin_enqueue_scripts( $hook ) {
-        //...
+        wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/admin.js', __FILE__ ), ['jquery'] );
+        wp_localize_script( self::SLUG, 'odwpsp', [
+            //...
+        ] );
+        wp_enqueue_style( self::SLUG, plugins_url( 'assets/css/admin.css', __FILE__ ) );
     }
 
     /**
@@ -267,6 +288,62 @@ class odwpSendlanePlugin {
         $options = self::get_options();
 ?>
 <input type="text" name="odwpsp_settings[hash_key]" value="<?= $options['hash_key'] ?>" class="regular-text">
+<?php
+    }
+
+    /**
+     * Renders plugin's administration page "List pages".
+     * @return void
+     */
+    public static function render_admin_page_list() {
+?>
+<div class="wrap">
+    <h1><?php _e( 'Sendlane plugin', self::SLUG ) ?></h1>
+    <p class="description"><?php _e( 'Zde můžete nastavit cílové stránky a akce k nim připojené.', self::SLUG ) ?></p>
+</div>
+<?php
+    }
+
+    /**
+     * Renders plugin's administration page "Add page".
+     * @return void
+     * @todo Add `wpnonce` for the security!
+     */
+    public static function render_admin_page_add() {
+        $avail_pages = get_pages( [
+            'sort_order' => 'asc',
+            'hierarchical' => 0,
+            'child_of' => 0,
+            'post_type' => 'page',
+        ] );
+?>
+<div class="wrap">
+    <h1><?php _e( 'Přidat stránku/akci', self::SLUG ) ?></h1>
+    <p class="description"><?php _e( 'Na této stránce můžete vytvořit novou stránku a akci k ní připojenou.', self::SLUG ) ?></p>
+    <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
+        <input type="hidden" name="_wpnonce" value="">
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="odwpsp-page"><?php _e( 'Cílová stránka', self::SLUG ) ?></label>
+                    </th>
+                    <td>
+                        <select id="odwpsp-page" name="page">
+                            <?php foreach( $avail_pages as $page ) : ?>
+                            <option value="<?php echo $page->ID ?>"><?php echo $page->title ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="Přidat akci">
+            <input type="reset" name="reset" id="reset" class="button button-cancel" value="Zrušit">
+        </p>
+    </form>
+</div>
 <?php
     }
 

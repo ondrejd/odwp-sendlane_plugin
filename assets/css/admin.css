@@ -1,1 +1,16 @@
+/* Styles for odwp-sendlane_plugin.
+ *
+ * @author Ondřej Doněk, <ondrejd@gmail.com>
+ */
+
+/* Admin menu icon */
+#adminmenu #toplevel_page_odwpsp_menu div.wp-menu-image::before {
+    content: '';
+}
+
+
+.toplevel_page_odwpsp_menu .wp-menu-image {
+    background-image: url( "../img/small-icons.png" ) !important;
+    background-repeat: no-repeat;
+}
 
