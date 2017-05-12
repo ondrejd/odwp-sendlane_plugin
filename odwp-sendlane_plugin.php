@@ -89,6 +89,7 @@ class odwpSendlanePlugin {
         return [
             'api_key' => '',
             'hash_key' => '',
+            'domain' => '',
         ];
     }
 
@@ -186,6 +187,14 @@ class odwpSendlanePlugin {
                 'hash_key',
                 __( '<em>Hash</em> klíč', self::SLUG ),
                 [__CLASS__, 'render_setting_hash_key'],
+                self::SLUG,
+                $section1
+        );
+
+        add_settings_field(
+                'domain',
+                __( 'Doména', self::SLUG ),
+                [__CLASS__, 'render_setting_domain'],
                 self::SLUG,
                 $section1
         );
@@ -290,7 +299,7 @@ class odwpSendlanePlugin {
 ?>
 <p class="description">
     <?php printf(
-            __( 'Pro přístup ke službě <b>Sendlane</b> potřebujete <abbr title="Application Program Interface">API</abbr> a <em>hash</em> klíč (více na stránce <a href="%s" target="blank">What is an API Key?</a>).', self::SLUG ),
+            __( 'Pro přístup ke službě <b>Sendlane</b> potřebujete <abbr title="Application Program Interface">API</abbr> a <em>hash</em> klíč (více na stránce <a href="%s" target="blank">What is an API Key?</a>). Nezapomeňte zadat také příslušnou doménu pro zadané klíče.', self::SLUG ),
             'http://help.sendlane.com/knowledgebase/api-key/'
     ) ?>
 </p>
@@ -309,13 +318,24 @@ class odwpSendlanePlugin {
     }
 
     /**
-     * Renders input for "api_key" setting.
+     * Renders input for "hash_key" setting.
      * @return void
      */
     public static function render_setting_hash_key() {
         $options = self::get_options();
 ?>
 <input type="text" name="odwpsp_settings[hash_key]" value="<?= $options['hash_key'] ?>" class="regular-text">
+<?php
+    }
+
+    /**
+     * Renders input for "domain" setting.
+     * @return void
+     */
+    public static function render_setting_domain() {
+        $options = self::get_options();
+?>
+<input type="text" name="odwpsp_settings[domain]" value="<?= $options['domain'] ?>" class="regular-text">
 <?php
     }
 
