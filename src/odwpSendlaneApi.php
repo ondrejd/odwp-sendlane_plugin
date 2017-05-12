@@ -69,12 +69,9 @@ class odwpSendlaneApi {
         $response = wp_remote_get( $url );
         $http_code = wp_remote_retrieve_response_code( $response );
         $body = wp_remote_retrieve_body( $response );
+        $data = json_decode( $body, true );
 
-        if ( $http_code == 200 ) {
-            return json_decode( $body );
-        }
-
-        return null;
+        return $data;
     }
 
     /**
@@ -82,7 +79,7 @@ class odwpSendlaneApi {
      * @return array Sendlane lists.
      * @todo Finish this!
      */
-    public function get_lists() {
+    public function lists() {
         $url = $this->get_api_url( 'list' );
         $lists = $this->call_server( $url );
 
@@ -98,7 +95,7 @@ class odwpSendlaneApi {
      * @return array Sendlane tags.
      * @todo Finish this!
      */
-    public function get_tags() {
+    public function tags() {
         $url = $this->get_api_url( 'tags' );
         $tags = $this->call_server( $url );
 

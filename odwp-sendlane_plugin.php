@@ -216,8 +216,8 @@ class odwpSendlanePlugin {
         );
         add_submenu_page(
                 'odwpsp_menu',
-                __( 'Přidat stránku/akci', self::SLUG ),
-                __( 'Přidat stránku', self::SLUG ),
+                __( 'Přidat akci', self::SLUG ),
+                __( 'Přidat akci', self::SLUG ),
                 'manage_options',
                 'odwpsp_menu_add',
                 [__CLASS__, 'render_admin_page_add']
@@ -281,14 +281,14 @@ class odwpSendlanePlugin {
      * @return array Sendlane lists.
      */
     public static function get_lists() {
-        return self::$sendlane->get_lists();
+        return self::$sendlane->lists();
     }
 
     /**
      * @return array Sendlane tags.
      */
     public static function get_tags() {
-        return self::$sendlane->get_tags();
+        return self::$sendlane->tags();
     }
 
     /**
@@ -348,6 +348,37 @@ class odwpSendlanePlugin {
 <div class="wrap">
     <h1><?php _e( 'Sendlane plugin', self::SLUG ) ?></h1>
     <p class="description"><?php _e( 'Zde můžete nastavit cílové stránky a akce k nim připojené.', self::SLUG ) ?></p>
+    <form id="odwpsp-actions_table_form" method="get">
+        <table class="wp-list-table widefat fixed striped odwpsp-actions">
+            <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Označit vše', self::SLUG ) ?></label>
+                        <input id="cb-select-all-1" type="checkbox">
+                    </td>
+                    <th scope="col" id="page" class="manage-column column-page column-primary"><?php _e( 'Cílová stránka', self::SLUG ) ?></th>
+                    <th scope="col" id="action" class="manage-column column-action"><?php _e( 'Akce', self::SLUG ) ?></th>
+                    <th scope="col" id="list_tag" class="manage-column column-list_tag"><?php _e( 'Seznam/tag', self::SLUG ) ?></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+                <tr>
+                    <td colspan="4"><?php _e( 'Zatím nejsou vytvořeny žádné akce.', self::SLUG ) ?></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Označit vše', self::SLUG ) ?></label>
+                        <input id="cb-select-all-2" type="checkbox">
+                    </td>
+                    <th scope="col" id="page" class="manage-column column-page column-primary"><?php _e( 'Cílová stránka', self::SLUG ) ?></th>
+                    <th scope="col" id="action" class="manage-column column-action"><?php _e( 'Akce', self::SLUG ) ?></th>
+                    <th scope="col" id="list_tag" class="manage-column column-list_tag"><?php _e( 'Seznam/tag', self::SLUG ) ?></th>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
 </div>
 <?php
     }
@@ -366,10 +397,20 @@ class odwpSendlanePlugin {
         ] );
         $avail_lists = self::get_lists();
         $avail_tags = self::get_tags();
+        $api_error = array_key_exists( 'error', $avail_lists ) || array_key_exists( 'error', $avail_tags );
 ?>
 <div class="wrap">
-    <h1><?php _e( 'Přidat stránku/akci', self::SLUG ) ?></h1>
-    <p class="description"><?php _e( 'Na této stránce můžete vytvořit novou stránku a akci k ní připojenou.', self::SLUG ) ?></p>
+    <h1><?php _e( 'Přidat akci', self::SLUG ) ?></h1>
+    <?php if( array_key_exists( 'error', $avail_lists ) ) : 
+    foreach( $avail_lists['error'] as $msg) : 
+        self::print_error( __( '<b>Sendlane API error:</b>&nbsp;', self::SLUG ) . $msg, 'error' );
+    endforeach; 
+    endif; ?>
+    <?php if( array_key_exists( 'error', $avail_tags ) ) : 
+    foreach( $avail_tags['error'] as $msg) : 
+        self::print_error( __( '<b>Sendlane API error:</b>&nbsp;', self::SLUG ) . $msg, 'error' );
+    endforeach; 
+    endif; ?>
     <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
         <input type="hidden" name="_wpnonce" value="">
         <table class="form-table">
@@ -401,10 +442,35 @@ class odwpSendlanePlugin {
                         <p class="description"><?php _e( 'Akce k provedení přes Sendlane API', self::SLUG ) ?></p>
                     </td>
                 </tr>
-                <tr id="odwpsp-row_select_lists">
-                    
+                <tr id="odwpsp-lists_row">
+                    <th scope="row">
+                        <label for="odwpsp-lists"><?php _e( 'Seznam', self::SLUG ) ?></label>
+                    </th>
+                    <td>
+                        <?php if( $api_error === true ) : ?>
+                        <select id="odwpsp-lists" name="lists" disabled="disabled"></select>
+                        <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', self::SLUG ) ?></p>
+                        <?php else : ?>
+                        <select id="odwpsp-lists" name="lists">
+                            <!-- XXX ... -->
+                        </select>
+                        <?php endif ?>
+                    </td>
                 </tr>
-                <tr id="odwpsp-row_select_tags">
+                <tr id="odwpsp-tags_row">
+                    <th scope="row">
+                        <label for="odwpsp-tags"><?php _e( 'Tag', self::SLUG ) ?></label>
+                    </th>
+                    <td>
+                        <?php if( $api_error === true ) : ?>
+                        <select id="odwpsp-tags" name="tags" disabled="disabled"></select>
+                        <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', self::SLUG ) ?></p>
+                        <?php else : ?>
+                        <select id="odwpsp-tags" name="tags">
+                            <!-- XXX ... -->
+                        </select>
+                        <?php endif ?>
+                    </td>
                 </tr>
             </tbody>
         </table>
