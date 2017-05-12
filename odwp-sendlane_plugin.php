@@ -17,18 +17,24 @@
  * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
  * @package odwp-sendlane_plugin
+ * @todo Replace "[]" by normal "array()"!
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( ! class_exists( 'odwp-sendlane_plugin' ) ) :
+
+include( dirname( __FILE__ ) . '/src/odwpSendlaneApi.php' );
+
+
+if ( ! class_exists( 'odwpSendlanePlugin' ) ) :
 
 /**
  * Main class.
  *
  * @author Ondřej Doněk, <ondrejd@gmail.com>
+ * @since 1.0
  */
 class odwpSendlanePlugin {
     /**
@@ -45,6 +51,11 @@ class odwpSendlanePlugin {
      * @const string.
      */
     const SETTINGS_KEY = 'odwpsp_settings';
+
+    /**
+     * @var odwpSendlaneApi $sendlane
+     */
+    protected static $sendlane;
 
     /**
      * Activates the plugin.
@@ -152,6 +163,9 @@ class odwpSendlanePlugin {
     public static function admin_init() {
         register_setting( self::SLUG, self::SETTINGS_KEY );
 
+        $options = self::get_options();
+        self::$sendlane = new odwpSendlaneApi( $options );
+
         $section1 = self::SETTINGS_KEY . '_section_1';
         add_settings_section(
                 $section1,
@@ -255,6 +269,20 @@ class odwpSendlanePlugin {
     }
 
     /**
+     * @return array Sendlane lists.
+     */
+    public static function get_lists() {
+        return self::$sendlane->get_lists();
+    }
+
+    /**
+     * @return array Sendlane tags.
+     */
+    public static function get_tags() {
+        return self::$sendlane->get_tags();
+    }
+
+    /**
      * Renders settings section 1.
      * @return void
      */
@@ -316,6 +344,8 @@ class odwpSendlanePlugin {
             'child_of' => 0,
             'post_type' => 'page',
         ] );
+        $avail_lists = self::get_lists();
+        $avail_tags = self::get_tags();
 ?>
 <div class="wrap">
     <h1><?php _e( 'Přidat stránku/akci', self::SLUG ) ?></h1>
@@ -331,15 +361,35 @@ class odwpSendlanePlugin {
                     <td>
                         <select id="odwpsp-page" name="page">
                             <?php foreach( $avail_pages as $page ) : ?>
-                            <option value="<?php echo $page->ID ?>"><?php echo $page->title ?></option>
+                            <option value="<?php echo $page->ID ?>"><?php echo $page->post_title ?></option>
                             <?php endforeach ?>
                         </select>
+                        <p class="description"><?php _e( 'Vyberte cílovou stránku.', self::SLUG ) ?></p>
                     </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="odwpsp-action"><?php _e( 'Akce', self::SLUG ) ?></label>
+                    </th>
+                    <td>
+                        <select id="odwpsp-action" name="action">
+                            <option value="subscribe"><?php _e( 'Přihlásit', self::SLUG ) ?></option>
+                            <option value="unsubscribe"><?php _e( 'Odhlásit', self::SLUG ) ?></option>
+                            <option value="tag_add"><?php _e( 'Přidat tag', self::SLUG ) ?></option>
+                            <option value="tag_remove"><?php _e( 'Odebrat tag', self::SLUG ) ?></option>
+                        </select>
+                        <p class="description"><?php _e( 'Akce k provedení přes Sendlane API', self::SLUG ) ?></p>
+                    </td>
+                </tr>
+                <tr id="odwpsp-row_select_lists">
+                    
+                </tr>
+                <tr id="odwpsp-row_select_tags">
                 </tr>
             </tbody>
         </table>
         <p class="submit">
-            <input type="submit" name="submit" id="submit" class="button button-primary" value="Přidat akci">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="Přidat akci">&nbsp;
             <input type="reset" name="reset" id="reset" class="button button-cancel" value="Zrušit">
         </p>
     </form>
