@@ -48,7 +48,7 @@ class odwpSendlanePlugin {
     const VERSION = '1.0.0';
 
     /**
-     * @const string.
+     * @const string
      */
     const SETTINGS_KEY = 'odwpsp_settings';
 
@@ -452,7 +452,9 @@ class odwpSendlanePlugin {
                         <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', self::SLUG ) ?></p>
                         <?php else : ?>
                         <select id="odwpsp-lists" name="lists">
-                            <!-- XXX ... -->
+                            <?php foreach( $avail_lists as $list ) : ?>
+                            <option value="<?php echo $list['list_id'] ?>"><?php echo $list['list_name'] ?></option>
+                            <?php endforeach ?>
                         </select>
                         <?php endif ?>
                     </td>
@@ -467,7 +469,9 @@ class odwpSendlanePlugin {
                         <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', self::SLUG ) ?></p>
                         <?php else : ?>
                         <select id="odwpsp-tags" name="tags">
-                            <!-- XXX ... -->
+                            <?php foreach( $avail_tags as $tag ) : ?>
+                            <option value="<?php echo $tag['tag_id'] ?>"><?php echo $tag['tag_name'] ?></option>
+                            <?php endforeach ?>
                         </select>
                         <?php endif ?>
                     </td>
