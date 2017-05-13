@@ -25,7 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-include( dirname( __FILE__ ) . '/src/odwpSendlaneApi.php' );
+include( dirname( __FILE__ ) . '/src/Sendlane_Api.php' );
+include( dirname( __FILE__ ) . '/src/Actions_List.php' );
 
 
 if ( ! class_exists( 'odwpSendlanePlugin' ) ) :
@@ -53,6 +54,11 @@ class odwpSendlanePlugin {
     const SETTINGS_KEY = 'odwpsp_settings';
 
     /**
+     * @const string
+     */
+    const TABLE_NAME = 'odwpsp';
+
+    /**
      * @var odwpSendlaneApi $sendlane
      */
     protected static $sendlane;
@@ -62,7 +68,25 @@ class odwpSendlanePlugin {
      * @return void
      */
     public static function activate() {
-        // Nothing to do...
+        global $wpdb;
+
+        // Create our database table if needed
+        $table_name = $wpdb->prefix . self::TABLE_NAME;
+        $charset_collate = $wpdb->get_charset_collate();
+
+        if ($wpdb->get_var('SHOW TABLES LIKE "'.$table_name.'" ') != $table_name) {
+            $sql = "CREATE TABLE `$table_name` (".
+                    "    `id` INTEGER ( 20 ) NOT NULL AUTO_INCREMENT ,".
+                    "    `page_id` INTEGER( 20 ) NOT NULL ,".
+                    "    `type` ENUM ( 'subscribe', 'unsubscribe', 'tag_add', 'tag_remove' ) NOT NULL ,".
+                    "    `list_id` INTEGER ( 20 ) ".
+                    "    `tag_id` INTEGER ( 20 ) ,".
+                    "    PRIMARY KEY `id` ( `id` )".
+                    ") $charset_collate; ";
+
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+            dbDelta($sql);
+        }
     }
 
     /**
