@@ -6,7 +6,7 @@
  * @package odwp-sendlane_plugin
  */
 
-if ( ! class_exists( 'odwpSendlaneApi' ) ) :
+if ( ! class_exists( 'Sendlane_Api' ) ) :
 
 /**
  * Sendlane API.
@@ -14,7 +14,7 @@ if ( ! class_exists( 'odwpSendlaneApi' ) ) :
  * @author Ondřej Doněk, <ondrejd@gmail.com>
  * @since 1.0
  */
-class odwpSendlaneApi {
+class Sendlane_Api {
     /**
      * @var string $api_key
      */

@@ -17,7 +17,7 @@
  * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
  * @package odwp-sendlane_plugin
- * @todo Replace "[]" by normal "array()"!
+ * @todo Replace "array()" by newer "[]"!
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 include( dirname( __FILE__ ) . '/src/Sendlane_Api.php' );
 include( dirname( __FILE__ ) . '/src/Actions_List.php' );
+include( dirname( __FILE__ ) . '/src/Actions_Table.php' );
 
 
 if ( ! class_exists( 'odwpSendlanePlugin' ) ) :
@@ -59,7 +60,7 @@ class odwpSendlanePlugin {
     const TABLE_NAME = 'odwpsp';
 
     /**
-     * @var odwpSendlaneApi $sendlane
+     * @var Sendlane_Api $sendlane
      */
     protected static $sendlane;
 
@@ -164,6 +165,7 @@ class odwpSendlanePlugin {
     public static function init() {
         register_activation_hook( __FILE__, [__CLASS__, 'activate'] );
         register_uninstall_hook( __FILE__, [__CLASS__, 'uninstall'] );
+
         add_action( 'init', [__CLASS__, 'init_textdomain'] );
         add_action( 'admin_init', [__CLASS__, 'admin_init'] );
         add_action( 'admin_menu', [__CLASS__, 'admin_menu'] );
@@ -189,7 +191,7 @@ class odwpSendlanePlugin {
         register_setting( self::SLUG, self::SETTINGS_KEY );
 
         $options = self::get_options();
-        self::$sendlane = new odwpSendlaneApi( $options );
+        self::$sendlane = new Sendlane_Api( $options );
 
         $section1 = self::SETTINGS_KEY . '_section_1';
         add_settings_section(
