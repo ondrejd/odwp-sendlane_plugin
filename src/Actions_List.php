@@ -92,52 +92,42 @@ class Actions_List extends WP_List_Table {
             'plural' => __('Kody', $this->plugin_slug),
             'ajax'   => false
         ] );
-    } // end __construct($page,$plugin_slug)
+    }
 
-  /**
-   * Returns the array of columns to use with the table.
-   *
-   * @return array $columns
-   * @since 0.1.0
-   */
-  public function get_columns() {
-    $columns = array(
-      'id'      => __('<input type="checkbox" id="bulk-all">', $this->plugin_slug),
-      'code'    => __('Kód svíčky', $this->plugin_slug),
-      'type'    => __('Typ svíčky', $this->plugin_slug),
-      'created' => __('Vytvořeno', $this->plugin_slug),
-      'found'   => __('Nalezeno', $this->plugin_slug)
-    );
-    return $columns;
-  } // end get_columns()
+    /**
+     * Returns the array of columns to use with the table.
+     * @return array $columns
+     */
+    public function get_columns() {
+        $columns = [
+            'id'      => __('<input type="checkbox" id="bulk-all">', $this->plugin_slug),
+            'code'    => __('Kód svíčky', $this->plugin_slug),
+            'type'    => __('Typ svíčky', $this->plugin_slug),
+            'created' => __('Vytvořeno', $this->plugin_slug),
+            'found'   => __('Nalezeno', $this->plugin_slug)
+        ];
+        return $columns;
+    }
 
-  /**
-   * Returns the array of hidden columns.
-   *
-   * @return array $columns
-   * @since 0.1.0
-   */
-  public function get_hidden_columns() {
-    $hidden = array();
-    return $hidden;
-  } // end get_hidden_columns()
+    /**
+     * Returns the array of hidden columns.
+     * @return array $columns
+     */
+    public function get_hidden_columns() {
+        $hidden = [];
+        return $hidden;
+    }
 
-  /**
-   * Returns the array of columns that can be sorted by the user.
-   *
-   * @return array $sortable
-   * @since 0.1.0
-   */
-  protected function get_sortable_columns() {
-    $sortable = array(
-      //'id' => array('id', false),
-      'code' => array('code', false),
-      'type' => array('type', false),
-      'created' => array('created', false),
-      'found' => array('found', false)
-    );
-    return $sortable;
-  } // end get_sortable_columns()
+    /**
+     * Returns the array of columns that can be sorted by the user.
+     * @return array $sortable
+     */
+    protected function get_sortable_columns() {
+        $sortable = [
+            //'id' => array('id', false),
+        ];
+        return $sortable;
+    }
 
   /**
    * Returns array with implemented bulk actions.
