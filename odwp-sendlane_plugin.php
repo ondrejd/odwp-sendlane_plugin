@@ -66,6 +66,7 @@ class odwpSendlanePlugin {
 
     /**
      * Activates the plugin.
+     * @global wpdb $wpdb
      * @return void
      */
     public static function activate() {
