@@ -81,7 +81,7 @@ class odwpSendlanePlugin {
                     "    `id` INTEGER ( 20 ) NOT NULL AUTO_INCREMENT ,".
                     "    `page_id` INTEGER( 20 ) NOT NULL ,".
                     "    `type` ENUM ( 'subscribe', 'unsubscribe', 'tag_add', 'tag_remove' ) NOT NULL ,".
-                    "    `list_id` INTEGER ( 20 ) ".
+                    "    `list_id` INTEGER ( 20 ) ,".
                     "    `tag_id` INTEGER ( 20 ) ,".
                     "    PRIMARY KEY `id` ( `id` )".
                     ") $charset_collate; ";
