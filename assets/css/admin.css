@@ -9,8 +9,19 @@
 }
 
 
-.toplevel_page_odwpsp_menu .wp-menu-image {
-    background-image: url( "../img/small-icons.png" ) !important;
+#toplevel_page_odwpsp_menu .wp-menu-image {
+    background-image: url( "../img/sendlane-icons.png" ) !important;
+    background-position: -20px 0px;
     background-repeat: no-repeat;
+    background-size: cover;
+	-webkit-transition: all .1s ease-in-out;
+	transition: all .1s ease-in-out;
+    height: 20px !important;
+    width: 20px !important;
+    margin: 7px 8px 7px 8px !important;
+    /*border: 1px dotted #f30;*/
 }
 
+#toplevel_page_odwpsp_menu.wp-menu-open .wp-menu-image {
+    background-position: 0px 0px;
+}

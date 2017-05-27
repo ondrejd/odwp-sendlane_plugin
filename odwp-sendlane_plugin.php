@@ -17,7 +17,6 @@
  * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
  * @package odwp-sendlane_plugin
- * @todo Replace "array()" by newer "[]"!
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -172,7 +171,7 @@ class odwpSendlanePlugin {
         add_action( 'admin_menu', [__CLASS__, 'admin_menu'] );
         add_action( 'plugins_loaded', [__CLASS__, 'plugins_loaded'] );
         add_action( 'wp_enqueue_scripts', [__CLASS__, 'enqueue_scripts'] );
-        add_action( 'admin_enqueue_scripts', [__CLASS__, 'admin_enqueue_scripts'] );
+        add_action( 'admin_enqueue_scripts', [__CLASS__, 'admin_enqueue_scripts'], 10 );
     }
 
     /**
@@ -567,7 +566,7 @@ if( !odwpSendlanePlugin::requirements_check() ) {
     odwpSendlanePlugin::deactivate_raw();
 
     if( is_admin() ) {
-        add_action( 'admin_head', array( odwpSendlanePlugin, 'requirements_error ') );
+        add_action( 'admin_head', [odwpSendlanePlugin, 'requirements_error '] );
     }
 } else {
     odwpSendlanePlugin::init();
