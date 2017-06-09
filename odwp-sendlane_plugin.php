@@ -248,13 +248,21 @@ class odwpSendlanePlugin {
                 'odwpsp_menu_add',
                 [__CLASS__, 'render_admin_page_add']
         );
-        add_options_page(
+        add_submenu_page(
+                'odwpsp_menu',
+                __( 'Nastavení pro Sendlane plugin', self::SLUG ),
+                __( 'Nastavení', self::SLUG ),
+                'manage_options',
+                'odwpsp_menu_options',
+                [__CLASS__, 'admin_options_page']
+        );
+        /*add_options_page(
                 __( 'Nastavení pro Sendlane plugin', self::SLUG ),
                 __( 'Sendlane plugin', self::SLUG ),
                 'manage_options',
                 self::SLUG . '-options',
                 [__CLASS__, 'admin_options_page']
-        );
+        );*/
     }
 
     /**

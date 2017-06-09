@@ -38,8 +38,8 @@ class Sendlane_Api {
     public function __construct( $options ) {
         if (
                 ! is_array( $options ) ||
-                ( array_key_exists( 'api_key', $options ) &&
-                  array_key_exists( 'hash_key', $options ) )
+                ! ( array_key_exists( 'api_key', $options ) &&
+                    array_key_exists( 'hash_key', $options ) )
         ) {
             $options = odwpSendlanePlugin::get_default_options();
         }
@@ -63,11 +63,22 @@ class Sendlane_Api {
     /**
      * @internal
      * @param string $url
+     * @param boolean $get (Optional) Set on TRUE if you want use GET instead of POST.
      * @return mixed
      */
-    private function call_server( $url ) {
-        $response = wp_remote_get( $url );
-        $http_code = wp_remote_retrieve_response_code( $response );
+    private function call_server( $url, $get = false ) {
+        $response = null;
+        if( $get === true ) {
+            $response = wp_remote_get( $url );
+        } else {
+            $response = wp_remote_post( $url );
+        }
+
+        /*$http_code = wp_remote_retrieve_response_code( $response );
+        if( empty( $http_code ) || (int) $http_code >= 400 ) {
+            // TODO Probably should be WP admin error here better than on other place!
+        }*/
+
         $body = wp_remote_retrieve_body( $response );
         $data = json_decode( $body, true );
 
@@ -80,11 +91,11 @@ class Sendlane_Api {
      * @todo Finish this!
      */
     public function lists() {
-        $url = $this->get_api_url( 'list' );
+        $url = $this->get_api_url( 'lists' );
         $lists = $this->call_server( $url );
 
         if( ! is_array( $lists ) ) {
-            $lists = array();
+            $lists = [];
         }
 
         return $lists;
@@ -100,7 +111,7 @@ class Sendlane_Api {
         $tags = $this->call_server( $url );
 
         if( ! is_array( $tags ) ) {
-            $tags = array();
+            $tags = [];
         }
 
         return $tags;
