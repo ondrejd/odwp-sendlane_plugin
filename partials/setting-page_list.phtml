@@ -1,0 +1,49 @@
+<?php
+/**
+ * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
+ * @package odwp-sendlane_plugin
+ * @since 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+?>
+<div class="wrap">
+    <h1><?php _e( 'Sendlane plugin', 'odwp-sendlane_plugin' ) ?></h1>
+    <p class="description"><?php _e( 'Zde můžete nastavit cílové stránky a akce k nim připojené.', 'odwp-sendlane_plugin' ) ?></p>
+    <form id="odwpsp-actions_table_form" method="get">
+        <table class="wp-list-table widefat fixed striped odwpsp-actions">
+            <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Označit vše', 'odwp-sendlane_plugin' ) ?></label>
+                        <input id="cb-select-all-1" type="checkbox">
+                    </td>
+                    <th scope="col" id="page" class="manage-column column-page column-primary"><?php _e( 'Cílová stránka', 'odwp-sendlane_plugin' ) ?></th>
+                    <th scope="col" id="action" class="manage-column column-action"><?php _e( 'Akce', 'odwp-sendlane_plugin' ) ?></th>
+                    <th scope="col" id="list_tag" class="manage-column column-list_tag"><?php _e( 'Seznam/tag', 'odwp-sendlane_plugin' ) ?></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+                <tr>
+                    <td colspan="4"><?php _e( 'Zatím nejsou vytvořeny žádné akce.', 'odwp-sendlane_plugin' ) ?></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Označit vše', 'odwp-sendlane_plugin' ) ?></label>
+                        <input id="cb-select-all-2" type="checkbox">
+                    </td>
+                    <th scope="col" id="page" class="manage-column column-page column-primary"><?php _e( 'Cílová stránka', 'odwp-sendlane_plugin' ) ?></th>
+                    <th scope="col" id="action" class="manage-column column-action"><?php _e( 'Akce', 'odwp-sendlane_plugin' ) ?></th>
+                    <th scope="col" id="list_tag" class="manage-column column-list_tag"><?php _e( 'Seznam/tag', 'odwp-sendlane_plugin' ) ?></th>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
