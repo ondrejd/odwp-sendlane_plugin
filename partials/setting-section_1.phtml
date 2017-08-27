@@ -1,0 +1,21 @@
+<?php
+/**
+ * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
+ * @package odwp-sendlane_plugin
+ * @see odwpSendlanePlugin::render_settings_section_1()
+ * @since 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+?>
+<p class="description">
+    <?php printf(
+            __( 'Pro přístup ke službě <b>Sendlane</b> potřebujete <abbr title="Application Program Interface">API</abbr> a <em>hash</em> klíč (více na stránce <a href="%s" target="blank">What is an API Key?</a>). Nezapomeňte zadat také příslušnou doménu pro zadané klíče.', 'odwp-sendlane_plugin' ),
+            'http://help.sendlane.com/knowledgebase/api-key/'
+    ) ?>
+</p>

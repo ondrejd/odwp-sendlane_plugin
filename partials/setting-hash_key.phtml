@@ -1,0 +1,21 @@
+<?php
+/**
+ * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
+ * @package odwp-sendlane_plugin
+ * @see odwpSendlanePlugin::render_setting_hash_key()
+ * @since 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * @var array $options Options of the Sendlane Plugin.
+ */
+$options = odwpSendlanePlugin::get_options();
+
+?>
+<input type="text" name="odwpsp_settings[hash_key]" value="<?php echo $options['hash_key'] ?>" class="regular-text">

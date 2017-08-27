@@ -43,26 +43,31 @@ if ( ! class_exists( 'odwpSendlanePlugin' ) ) :
 class odwpSendlanePlugin {
     /**
      * @const string Plugin's slug.
+     * @since 1.0.0
      */
     const SLUG = 'odwp-sendlane_plugin';
 
     /**
      * @const string Plugin's version.
+     * @since 1.0.0
      */
     const VERSION = '1.0.0';
 
     /**
      * @const string
+     * @since 1.0.0
      */
     const SETTINGS_KEY = 'odwpsp_settings';
 
     /**
      * @const string
+     * @since 1.0.0
      */
     const TABLE_NAME = 'odwpsp';
 
     /**
      * @var Sendlane_Api $sendlane
+     * @since 1.0.0
      */
     protected static $sendlane;
 
@@ -70,6 +75,7 @@ class odwpSendlanePlugin {
      * Activates the plugin.
      * @global wpdb $wpdb
      * @return void
+     * @since 1.0.0
      */
     public static function activate() {
         global $wpdb;
@@ -97,6 +103,7 @@ class odwpSendlanePlugin {
      * @internal Deactivates the plugin directly by updating WP option `active_plugins`.
      * @link https://developer.wordpress.org/reference/functions/deactivate_plugins/
      * @return void
+     * @since 1.0.0
      * @todo Check if using `deactivate_plugins` whouldn't be better.
      */
     public static function deactivate_raw() {
@@ -112,6 +119,7 @@ class odwpSendlanePlugin {
 
     /**
      * @return array Default values for settings of the plugin.
+     * @since 1.0.0
      */
     public static function get_default_options() {
         return [
@@ -123,6 +131,7 @@ class odwpSendlanePlugin {
 
     /**
      * @return array Settings of the plugin.
+     * @since 1.0.0
      */
     public static function get_options() {
         $defaults = self::get_default_options();
@@ -149,6 +158,7 @@ class odwpSendlanePlugin {
      * Returns value of option with given key.
      * @param string $key Option's key.
      * @return mixed Option's value.
+     * @since 1.0.0
      * @throws Exception Whenever option with given key doesn't exist.
      */
     public static function get_option( $key ) {
@@ -164,6 +174,7 @@ class odwpSendlanePlugin {
     /**
      * Initializes the plugin.
      * @return void
+     * @since 1.0.0
      */
     public static function init() {
         register_activation_hook( __FILE__, [__CLASS__, 'activate'] );
@@ -180,6 +191,7 @@ class odwpSendlanePlugin {
     /**
      * Hook for "init" action.
      * @return void
+     * @since 1.0.0
      */
     public static function init_textdomain() {
         $path = dirname( __FILE__ ) . '/languages';
@@ -189,6 +201,7 @@ class odwpSendlanePlugin {
     /**
      * Hook for "admin_init" action.
      * @return void
+     * @since 1.0.0
      */
     public static function admin_init() {
         register_setting( self::SLUG, self::SETTINGS_KEY );
@@ -199,14 +212,14 @@ class odwpSendlanePlugin {
         $section1 = self::SETTINGS_KEY . '_section_1';
         add_settings_section(
                 $section1,
-                __( 'Sendlane API' ),
+                __( 'Sendlane API', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_settings_section_1'],
                 self::SLUG
         );
 
         add_settings_field(
                 'api_key',
-                __( 'API klíč', self::SLUG ),
+                __( 'API klíč', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_api_key'],
                 self::SLUG,
                 $section1
@@ -214,7 +227,7 @@ class odwpSendlanePlugin {
 
         add_settings_field(
                 'hash_key',
-                __( '<em>Hash</em> klíč', self::SLUG ),
+                __( '<em>Hash</em> klíč', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_hash_key'],
                 self::SLUG,
                 $section1
@@ -222,7 +235,7 @@ class odwpSendlanePlugin {
 
         add_settings_field(
                 'domain',
-                __( 'Doména', self::SLUG ),
+                __( 'Doména', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_domain'],
                 self::SLUG,
                 $section1
@@ -232,11 +245,12 @@ class odwpSendlanePlugin {
     /**
      * Hook for "admin_menu" action.
      * @return void
+     * @since 1.0.0
      */
     public static function admin_menu() {
         add_menu_page(
-                __( 'Sendlane plugin', self::SLUG ),
-                __( 'Sendlane plugin', self::SLUG ),
+                __( 'Sendlane plugin', 'odwp-sendlane_plugin' ),
+                __( 'Sendlane plugin', 'odwp-sendlane_plugin' ),
                 'manage_options',
                 'odwpsp_menu',
                 [__CLASS__, 'render_admin_page_list'],
@@ -245,33 +259,27 @@ class odwpSendlanePlugin {
         );
         add_submenu_page(
                 'odwpsp_menu',
-                __( 'Přidat akci', self::SLUG ),
-                __( 'Přidat akci', self::SLUG ),
+                __( 'Přidat akci', 'odwp-sendlane_plugin' ),
+                __( 'Přidat akci', 'odwp-sendlane_plugin' ),
                 'manage_options',
                 'odwpsp_menu_add',
                 [__CLASS__, 'render_admin_page_add']
         );
         add_submenu_page(
                 'odwpsp_menu',
-                __( 'Nastavení pro Sendlane plugin', self::SLUG ),
-                __( 'Nastavení', self::SLUG ),
+                __( 'Nastavení pro Sendlane plugin', 'odwp-sendlane_plugin' ),
+                __( 'Nastavení', 'odwp-sendlane_plugin' ),
                 'manage_options',
                 'odwpsp_menu_options',
                 [__CLASS__, 'admin_options_page']
         );
-        /*add_options_page(
-                __( 'Nastavení pro Sendlane plugin', self::SLUG ),
-                __( 'Sendlane plugin', self::SLUG ),
-                'manage_options',
-                self::SLUG . '-options',
-                [__CLASS__, 'admin_options_page']
-        );*/
     }
 
     /**
      * Hook for "admin_enqueue_scripts" action.
      * @param string $hook
      * @return void
+     * @since 1.0.0
      */
     public static function admin_enqueue_scripts( $hook ) {
         wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/admin.js', __FILE__ ), ['jquery'] );
@@ -284,23 +292,16 @@ class odwpSendlanePlugin {
     /**
      * Renders plugin's options page.
      * @return void
+     * @since 1.0.0
      */
     public static function admin_options_page() {
-?>
-<form action="options.php" method="post">
-    <h2><?php _e( 'Nastavení pro Sendlane plugin', self::SLUG ) ?></h2>
-<?php
-        settings_fields( self::SLUG );
-        do_settings_sections( self::SLUG );
-        submit_button();
-?>
-</form>
-<?php
+        echo self::load_template( 'screen-options_page' );
     }
 
     /**
      * Hook for "plugins_loaded" action.
      * @return void
+     * @since 1.0.0
      */
     public static function plugins_loaded() {
         //...
@@ -309,6 +310,7 @@ class odwpSendlanePlugin {
     /**
      * Hook for "wp_enqueue_scripts" action.
      * @return void
+     * @since 1.0.0
      */
     public static function enqueue_scripts() {
         //...
@@ -323,6 +325,7 @@ class odwpSendlanePlugin {
 
     /**
      * @return array Sendlane tags.
+     * @since 1.0.0
      */
     public static function get_tags() {
         return self::$sendlane->tags();
@@ -331,77 +334,63 @@ class odwpSendlanePlugin {
     /**
      * Renders settings section 1.
      * @return void
+     * @since 1.0.0
      */
     public static function render_settings_section_1() {
-?>
-<p class="description">
-    <?php printf(
-            __( 'Pro přístup ke službě <b>Sendlane</b> potřebujete <abbr title="Application Program Interface">API</abbr> a <em>hash</em> klíč (více na stránce <a href="%s" target="blank">What is an API Key?</a>). Nezapomeňte zadat také příslušnou doménu pro zadané klíče.', self::SLUG ),
-            'http://help.sendlane.com/knowledgebase/api-key/'
-    ) ?>
-</p>
-<?php
+        echo self::load_template( 'setting-section_1' );
     }
 
     /**
      * Renders input for "api_key" setting.
      * @return void
+     * @since 1.0.0
      */
     public static function render_setting_api_key() {
-        $options = self::get_options();
-?>
-<input type="text" name="odwpsp_settings[api_key]" value="<?= $options['api_key'] ?>" class="regular-text">
-<?php
+        echo self::load_template( 'setting-api_key' );
     }
 
     /**
      * Renders input for "hash_key" setting.
      * @return void
+     * @since 1.0.0
      */
     public static function render_setting_hash_key() {
-        $options = self::get_options();
-?>
-<input type="text" name="odwpsp_settings[hash_key]" value="<?= $options['hash_key'] ?>" class="regular-text">
-<?php
+        echo self::load_template( 'setting-hash_key' );
     }
 
     /**
      * Renders input for "domain" setting.
      * @return void
+     * @since 1.0.0
      */
     public static function render_setting_domain() {
-        $options = self::get_options();
-?>
-<input type="text" name="odwpsp_settings[domain]" value="<?= $options['domain'] ?>" class="regular-text">
-<?php
+        echo self::load_template( 'setting-domain' );
     }
 
     /**
      * Renders plugin's administration page "List pages".
      * @return void
+     * @since 1.0.0
      */
     public static function render_admin_page_list() {
-        ob_start( function() {} );
-        include( dirname( __FILE__ ) . '/partials/setting-page_list.phtml' );
-        echo ob_get_flush();
+        echo self::load_template( 'screen-page_list' );
     }
 
     /**
      * Renders plugin's administration page "Add page".
      * @return void
-     * @todo Add `wpnonce` for the security!
+     * @since 1.0.0
      */
     public static function render_admin_page_add() {
-        ob_start( function() {} );
-        include( dirname( __FILE__ ) . '/partials/setting-page_add.phtml' );
-        echo ob_get_flush();
+        echo self::load_template( 'screen-page_add' );
     }
 
     /**
      * @internal Uninstalls the plugin.
      * @return void
+     * @since 1.0.0
      */
-    private static function uninstall() {
+    public static function uninstall() {
         if( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
             return;
         }
@@ -410,19 +399,37 @@ class odwpSendlanePlugin {
     }
 
     /**
-     * @internal Prints error message in correct WP amin style.
+     * @internal Prints user notice in correct WP amin style.
      * @param string $msg Error message.
      * @param string $type (Optional.) One of ['info','updated','error'].
+     * @param boolean $dismissable (Optional.) Should be message dissmissable?
      * @return void
+     * @since 1.0.0
      */
-    protected static function print_error( $msg, $type = 'info' ) {
+    protected static function print_notice( $msg, $type = 'info', $dismissable = true ) {
         $avail_types = ['error', 'info', 'updated'];
         $_type = in_array( $type, $avail_types ) ? $type : 'info';
         printf( '<div class="%s"><p>%s</p></div>', $_type, $msg );
+    }
+
+    /**
+     * @internal Loads specified template with given arguments.
+     * @param string $template
+     * @param array  $args (Optional.)
+     * @return string Output created by rendering template.
+     * @since 1.0.0
+     */
+    protected static function load_template( $template, array $args = [] ) {
+        extract( $args );
+        $path = sprintf( '%s/partials/%s.phtml', dirname( __FILE__ ), $template );
+        ob_start( function() {} );
+        include( $path );
+        return ob_get_flush();
     }
 } // End of odwpSendlanePlugin
 
 endif;
 
-// Initialize plugin
+
+// Initialize the plugin
 odwpSendlanePlugin::init();

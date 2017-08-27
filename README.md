@@ -1,6 +1,6 @@
-# WordPress [Sendlane](1) Plugin
+# WordPress Sendlane Plugin
 
-Plugin pro integraci přihlášení uživatelů k hromadným emailům obsluhovaným pomocí [Sendlane API](2).
+Plugin pro integraci přihlášení uživatelů k hromadným emailům obsluhovaným pomocí služby [Sendlane](1) (dokumentaci k <abbr title="Application Programming Interface">API</abbr> najdtete [zde][2]).
 
 ## Obrázky
 
