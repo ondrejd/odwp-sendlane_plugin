@@ -1,10 +1,16 @@
 <?php
 /**
- * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @author Ondrej Donek <ondrejd@gmail.com>
  * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
  * @package odwp-sendlane_plugin
+ * @since 1.0.0
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 if ( ! class_exists( 'Sendlane_Api' ) ) :
 
@@ -15,6 +21,7 @@ if ( ! class_exists( 'Sendlane_Api' ) ) :
  * @since 1.0
  */
 class Sendlane_Api {
+
     /**
      * @var string $api_key
      */
@@ -50,23 +57,24 @@ class Sendlane_Api {
     }
 
     /**
+     * @internal Retrieves correct API call's URL by given call name.
      * @param string $cmd
      * @return string
      */
-    protected function get_api_url( $cmd ) {
+    protected function get_api_url( $call ) {
         $domain = empty( $this->domain ) ? '' : $this->domain . '.';
 
-        return 'https://' . $domain . 'sendlane.com/api/v1/' . $cmd .
+        return 'https://' . $domain . 'sendlane.com/api/v1/' . $call .
                 '?api=' . $this->api_key . '&hash=' . $this->hash_key;        
     }
 
     /**
-     * @internal
+     * @internal Call Sendlane server.
      * @param string $url
      * @param boolean $get (Optional) Set on TRUE if you want use GET instead of POST.
      * @return mixed
      */
-    private function call_server( $url, $get = false ) {
+    protected function call_server( $url, $get = false ) {
         $response = null;
         if( $get === true ) {
             $response = wp_remote_get( $url );

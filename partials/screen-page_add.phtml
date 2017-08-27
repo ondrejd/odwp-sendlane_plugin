@@ -8,36 +8,48 @@
  * @since 1.0.0
  *
  * @todo Add `wpnonce` for the security!
+ * @todo Argument "child_of" for {@see get_pages()} and {@see get_posts()} should be set by user options!
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$avail_pages = get_pages( [
-    'sort_order'   => 'asc',
-    'hierarchical' => 0,
-    'child_of'     => 0,
-    'post_type'    => 'page',
-] );
+/** @var array $avail_lists Available lists defined in Sendlane application. */
 $avail_lists = odwpSendlanePlugin::get_lists();
+/** @var array $avail_tags Available tags defined in Sendlane application. */
 $avail_tags  = odwpSendlanePlugin::get_tags();
+/** @var boolean $api_error TRUE if API error occured. */
 $api_error   = array_key_exists( 'error', $avail_lists ) || array_key_exists( 'error', $avail_tags );
-$error_msg   = __( '<b>Chyba Sendlane API:</b>&nbsp;%s', 'odwp-sendlane_plugin' );
+
+
+if( ! function_exists( 'odwpsp_print_options_errors' ) ) :
+    /**
+     * @internal Prints errors in Sendlane tags/lists return data.
+     * @param array $list
+     * @return void
+     * @since 1.0.0
+     */
+    function odwpsp_print_options_errors( array $list ) {
+        /** @var string $msg Basic API error message. */
+        $msg = __( '<b>Chyba Sendlane API:</b>&nbsp;%s', 'odwp-sendlane_plugin' );
+
+        if( ! array_key_exists( 'error', $list ) ) {
+            return;
+        }
+
+        foreach( $list['error'] as $err ) {
+            odwpSendlanePlugin::print_notice( sprintf( $msg, $err ), 'error', false );
+        }
+    }
+endif;
 
 ?>
 <div class="wrap">
     <h1><?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?></h1>
-    <?php if( array_key_exists( 'error', $avail_lists ) ) : 
-    foreach( $avail_lists['error'] as $msg) : 
-        odwpSendlanePlugin::print_notice( sprintf( $error_msg, $msg ), 'error', false );
-    endforeach; 
-    endif; ?>
-    <?php if( array_key_exists( 'error', $avail_tags ) ) : 
-    foreach( $avail_tags['error'] as $msg) : 
-        odwpSendlanePlugin::print_notice( sprintf( $error_msg, $msg ), 'error', false );
-    endforeach; 
-    endif; ?>
+    <?php odwpsp_print_options_errors( $avail_lists ) ?>
+    <?php odwpsp_print_options_errors( $avail_tags ) ?>
+    <p><?php printf( __( 'Zde můžete přidat akci dle %sSendlane API%s, která se má provést na vybrané stránce. Volitelně můžete přidat <code>GET</code> nebo <code>POST</code> parametr, který bude ke spuštění akce také vyžadovaný.', 'odwp-sendlane_plugin' ), '<a href="http://help.sendlane.com/knowledgebase/api-docs/" target="_blank">', '</a>' ) ?></p>
     <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
         <input type="hidden" name="_wpnonce" value="">
         <table class="form-table">
@@ -47,11 +59,12 @@ $error_msg   = __( '<b>Chyba Sendlane API:</b>&nbsp;%s', 'odwp-sendlane_plugin' 
                         <label for="odwpsp-page"><?php _e( 'Cílová stránka', 'odwp-sendlane_plugin' ) ?></label>
                     </th>
                     <td>
-                        <select id="odwpsp-page" name="page">
-                            <?php foreach( $avail_pages as $page ) : ?>
-                            <option value="<?php echo $page->ID ?>"><?php echo $page->post_title ?></option>
-                            <?php endforeach ?>
-                        </select>
+                        <?php wp_dropdown_pages( [
+                            'id'    => 'odwpsp-page',
+                            'name'  => 'page',
+                            'echo'  => true,
+                            'class' => 'odwpsp-page_select',
+                        ] ) ?>
                         <p class="description"><?php _e( 'Vyberte cílovou stránku.', 'odwp-sendlane_plugin' ) ?></p>
                     </td>
                 </tr>

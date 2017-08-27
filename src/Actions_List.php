@@ -1,17 +1,24 @@
 <?php
 /**
- * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @author Ondrej Donek <ondrejd@gmail.com>
  * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
  * @package odwp-sendlane_plugin
+ * @since 1.0.0
  */
 
-if ( ! class_exists( 'Actions_List' ) ) :
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 // Ensure the `WP_List_Table` is loaded
 if ( ! class_exists( 'WP_List_Table' ) ) :
     require_once ABSPATH.'wp-admin/includes/class-wp-list-table.php';
 endif;
+
+
+if ( ! class_exists( 'Actions_List' ) ) :
 
 /**
  * Administration listing for actions.
