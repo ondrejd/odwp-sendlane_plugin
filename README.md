@@ -10,7 +10,18 @@ Plugin that enables using [Sendlane][2] application in the [WordPress][1].
 
 ## Screenhots
 
-- ![Plugin options](screenshot-1.png)
+### Actions list
+
+![Actions list](screenshot-1.png)
+
+### Add action
+
+![Add action](screenshot-2.png)
+
+### Plugin options
+
+![Plugin options](screenshot-3.png)
+
 
 [1]: https://wordpress.org/
 [2]: https://sendlane.com/
