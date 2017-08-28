@@ -19,7 +19,8 @@ if( ! class_exists( 'Sendlane_Api_Calls' ) ) :
  * @link http://help.sendlane.com/knowledgebase/api-docs/
  * @since 1.0.0
  */
-class Sendlane_Api_Calls implements ArrayAccess {
+class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
+
     /**
      * @var array $calls
      * @since 1.0.0
@@ -27,12 +28,18 @@ class Sendlane_Api_Calls implements ArrayAccess {
     protected $calls = [];
 
     /**
+     * @var int $index
+     * @since 1.0.0
+     */
+    protected $index = 0;
+
+    /**
      * Constructor.
      * @return void
      * @since 1.0.0
      */
     public function __construct() {
-        $this->calls['user-details'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'user-details',
             __( 'To get api and hash key.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -41,7 +48,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'password', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Password.', 'odwp-sendlane_plugin' ) ),
             ]
         );
-        $this->calls['list-subscribers-add'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'list-subscribers-add',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -55,7 +62,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
             ] )
             
         );
-        $this->calls['list-subscriber-add'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'list-subscriber-add',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -70,7 +77,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'tag_names', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
             ])
         );
-        $this->calls['subscribers-delete'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'subscribers-delete',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -79,7 +86,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'email', Sendlane_Api_Call_Param::TYPE_STR, true, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['list-create'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'list-create',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -99,7 +106,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'phone', Sendlane_Api_Call_Param::TYPE_STR, true, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['list-update'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'list-update',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -119,7 +126,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'phone', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['list-delete'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'list-delete',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -127,7 +134,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['lists'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'lists',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -137,7 +144,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['opt-in-form'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'opt-in-form',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -145,7 +152,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'form_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['opt-in-create'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'opt-in-create',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -159,7 +166,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'redirect_url', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['subscriber-export'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'subscriber-export',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -170,7 +177,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'format', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['tags'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'tags',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -180,7 +187,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Result Limit Per Result (By default : 10)', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['tag-create'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'tag-create',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -188,7 +195,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Tag name', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['tag-subscriber-add'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'tag-subscriber-add',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -198,7 +205,7 @@ class Sendlane_Api_Calls implements ArrayAccess {
                 new Sendlane_Api_Call_Param( 'tag_names', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Tag name’s separated by comma. Eg. <a href="//help.sendlane.com/knowledgebase/api-docs/#tag-id" target="_blank">Test Tag1,Test Tag2,....</a>. Required if <code>tag_ids</code> not provided.', 'odwp-sendlane_plugin' ) ),
             ] )
         );
-        $this->calls['tag-subscriber-remove'] = new Sendlane_Api_Call(
+        $this->calls[] = new Sendlane_Api_Call(
             'tag-subscriber-remove',
             __( '…', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
@@ -225,10 +232,9 @@ class Sendlane_Api_Calls implements ArrayAccess {
     }
 
     /**
-     * @internal Part of {@see ArrayAccess} implementation.
+     * @internal Part of {@see \ArrayAccess} implementation.
      * @param string $offset
      * @return bool
-     * @see ArrayAccess::offsetExists()
      * @since 1.0.0
      */
     public function offsetExists( $offset ) : bool {
@@ -236,10 +242,9 @@ class Sendlane_Api_Calls implements ArrayAccess {
     }
 
     /**
-     * @internal Part of {@see ArrayAccess} implementation.
+     * @internal Part of {@see \ArrayAccess} implementation.
      * @param string $offset
      * @return Sendlane_Api_Call
-     * @see ArrayAccess::offsetGet()
      * @since 1.0.0
      */
     public function offsetGet( $offset ) : Sendlane_Api_Call {
@@ -247,11 +252,10 @@ class Sendlane_Api_Calls implements ArrayAccess {
     }
 
     /**
-     * @internal Part of {@see ArrayAccess} implementation.
+     * @internal Part of {@see \ArrayAccess} implementation.
      * @param string $offset
      * @param Sendlane_Api_Call $value
      * @return void
-     * @see ArrayAccess::offsetSet()
      * @since 1.0.0
      */
     public function offsetSet( $offset, $value ) {
@@ -259,14 +263,58 @@ class Sendlane_Api_Calls implements ArrayAccess {
     }
 
     /**
-     * @internal Part of {@see ArrayAccess} implementation.
+     * @internal Part of {@see \ArrayAccess} implementation.
      * @param string $offset
      * @return void
-     * @see ArrayAccess::offsetUnset()
      * @since 1.0.0
      */
     public function offsetUnset( $offset ) {
         unset( $this->calls[$offset] );
+    }
+
+    /**
+     * @internal Part of {@see \Iterator} implementation.
+     * @return Sendlane_Api_Call
+     * @since 1.0.0
+     */
+    public function current() : Sendlane_Api_Call {
+        return $this->calls[$this->index];
+    }
+
+    /**
+     * @internal Part of {@see \Iterator} implementation.
+     * @return int
+     * @since 1.0.0
+     */
+    public function key() {
+        return $this->index;
+    }
+
+    /**
+     * @internal Part of {@see \Iterator} implementation.
+     * @return void
+     * @since 1.0.0
+     */
+    public function next() {
+        ++$this->index;
+    }
+
+    /**
+     * @internal Part of {@see \Iterator} implementation.
+     * @return void
+     * @since 1.0.0
+     */
+    public function rewind() {
+        $this->index = 0;
+    }
+
+    /**
+     * @internal Part of {@see \Iterator} implementation.
+     * @return bool
+     * @since 1.0.0
+     */
+    public function valid() : bool {
+        return isset( $this->calls[$this->index] );
     }
 }
 

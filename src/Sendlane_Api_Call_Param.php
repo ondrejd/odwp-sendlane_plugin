@@ -57,7 +57,7 @@ class Sendlane_Api_Call_Param {
      * @param boolean $required  TRUE if parameter is required.
      * @return void
      */
-    public function __construct( $name, integer $type, boolean $required ) {
+    public function __construct( $name, int $type, bool $required ) {
         $this->name = $name;
         $this->type = $type;
         $this->required = $required;

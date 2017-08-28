@@ -49,14 +49,14 @@ endif;
     <h1><?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?></h1>
     <?php odwpsp_print_options_errors( $avail_lists ) ?>
     <?php odwpsp_print_options_errors( $avail_tags ) ?>
-    <p><?php printf( __( 'Zde můžete přidat akci dle %sSendlane API%s, která se má provést na vybrané stránce. Volitelně můžete přidat <code>GET</code> nebo <code>POST</code> parametr, který bude ke spuštění akce také vyžadovaný.', 'odwp-sendlane_plugin' ), '<a href="http://help.sendlane.com/knowledgebase/api-docs/" target="_blank">', '</a>' ) ?></p>
+    <p><?php printf( __( 'Zde můžete přidat akci dle <a href="%s" target="_blank">Sendlane API</a>, která se má provést na vybrané stránce. Volitelně můžete přidat <code>GET</code> nebo <code>POST</code> parametr, který bude ke spuštění akce také vyžadovaný - odeslání těchto parametrů můžete dosáhnout pomocí formulářů či (v případě <code>GET</code> dotazů) pouhých odkazů, ty můžete vytvořit standartními <a href="%s" target="_blank">WordPress</a> prostředky či prostřednictvím pluginů.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/', 'https://wordpress.org/' ) ?></p>
     <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
         <input type="hidden" name="_wpnonce" value="">
         <table class="form-table">
             <tbody>
                 <tr>
                     <th scope="row">
-                        <label for="odwpsp-page"><?php _e( 'Cílová stránka', 'odwp-sendlane_plugin' ) ?></label>
+                        <label for="odwpsp-page"><?php _e( 'Stránka', 'odwp-sendlane_plugin' ) ?></label>
                     </th>
                     <td>
                         <?php wp_dropdown_pages( [
@@ -65,7 +65,7 @@ endif;
                             'echo'  => true,
                             'class' => 'odwpsp-page_select',
                         ] ) ?>
-                        <p class="description"><?php _e( 'Vyberte cílovou stránku.', 'odwp-sendlane_plugin' ) ?></p>
+                        <p class="description"><?php printf( __( 'Vyberte cílovou stránku - stránka po jejímž načtení se má <a href="%s" target="_blank">Sendlane API</a> akce spustit.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/' ) ?></p>
                     </td>
                 </tr>
                 <tr>
@@ -74,50 +74,63 @@ endif;
                     </th>
                     <td>
                         <select id="odwpsp-action" name="action">
-                            <option value="subscribe"><?php _e( 'Přihlásit', 'odwp-sendlane_plugin' ) ?></option>
+                            <!--<option value="subscribe"><?php _e( 'Přihlásit', 'odwp-sendlane_plugin' ) ?></option>
                             <option value="unsubscribe"><?php _e( 'Odhlásit', 'odwp-sendlane_plugin' ) ?></option>
                             <option value="tag_add"><?php _e( 'Přidat tag', 'odwp-sendlane_plugin' ) ?></option>
-                            <option value="tag_remove"><?php _e( 'Odebrat tag', 'odwp-sendlane_plugin' ) ?></option>
-                        </select>
-                        <p class="description"><?php _e( 'Akce k provedení přes Sendlane API', 'odwp-sendlane_plugin' ) ?></p>
-                    </td>
-                </tr>
-                <tr id="odwpsp-lists_row">
-                    <th scope="row">
-                        <label for="odwpsp-lists"><?php _e( 'Seznam', 'odwp-sendlane_plugin' ) ?></label>
-                    </th>
-                    <td>
-                        <?php if( $api_error === true ) : ?>
-                        <select id="odwpsp-lists" name="lists" disabled="disabled"></select>
-                        <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
-                        <?php else : ?>
-                        <select id="odwpsp-lists" name="lists">
-                            <?php foreach( $avail_lists as $list ) : ?>
-                            <option value="<?php echo $list['list_id'] ?>"><?php echo $list['list_name'] ?></option>
+                            <option value="tag_remove"><?php _e( 'Odebrat tag', 'odwp-sendlane_plugin' ) ?></option>-->
+                            <?php
+                            $calls = new Sendlane_Api_Calls();
+                            foreach( $calls as $call_key => $call ) : ?>
+                            <option value="<?php echo  $call->get_name() ?>"><?php echo  $call->get_name() ?></option>
                             <?php endforeach ?>
                         </select>
-                        <?php endif ?>
-                    </td>
-                </tr>
-                <tr id="odwpsp-tags_row">
-                    <th scope="row">
-                        <label for="odwpsp-tags"><?php _e( 'Tag', 'odwp-sendlane_plugin' ) ?></label>
-                    </th>
-                    <td>
-                        <?php if( $api_error === true ) : ?>
-                        <select id="odwpsp-tags" name="tags" disabled="disabled"></select>
-                        <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
-                        <?php else : ?>
-                        <select id="odwpsp-tags" name="tags">
-                            <?php foreach( $avail_tags as $tag ) : ?>
-                            <option value="<?php echo $tag['tag_id'] ?>"><?php echo $tag['tag_name'] ?></option>
-                            <?php endforeach ?>
-                        </select>
-                        <?php endif ?>
+                        <p class="description"><?php printf( __( 'Vyberte jednu z akcí <a href="%s" target="_blank">Sendlane API</a>, kterou chcete spustit na této stránce &ndash; pokud by jste náhodou chtěli na té samé stránce spustit více akcí, stačí novou akci definovat pomocí formuláře a zvolit stejnou stránku. Zvolit můžete jen některé z dostupných akcí a ke všem jsou připojeny základní parametry (<code>api_key</code> a <code>hash_key</code>).', 'odwp-sendlane_api' ), null ) ?></p>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <p style="color: #f30; font-weight: bold;">V praxi by se toto mělo zobrazovat až po vybrání akce a také by se mělo kontrolovat, zda jsou data načtená či ne.</p>
+        <div id="odwpsp-additional_action_settings">
+            <h2><?php _e( 'Dodatečné nastavení akce', 'odwp-sendlane_plugin' ) ?></h2>
+            <table class="form-table">
+                <tbody id="odwpsp-action_parameters_tbody">
+                    <tr class="odwpsp-lists_row">
+                        <th scope="row">
+                            <label for="odwpsp-lists"><?php _e( 'Seznam', 'odwp-sendlane_plugin' ) ?></label>
+                        </th>
+                        <td>
+                            <?php if( $api_error === true ) : ?>
+                            <select id="odwpsp-lists" name="lists" disabled="disabled"></select>
+                            <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
+                            <?php else : ?>
+                            <select id="odwpsp-lists" name="lists">
+                                <?php foreach( $avail_lists as $list ) : ?>
+                                <option value="<?php echo $list['list_id'] ?>"><?php echo $list['list_name'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                    <tr class="odwpsp-tags_row">
+                        <th scope="row">
+                            <label for="odwpsp-tags"><?php _e( 'Tag', 'odwp-sendlane_plugin' ) ?></label>
+                        </th>
+                        <td>
+                            <?php if( $api_error === true ) : ?>
+                            <select id="odwpsp-tags" name="tags" disabled="disabled"></select>
+                            <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
+                            <?php else : ?>
+                            <select id="odwpsp-tags" name="tags">
+                                <?php foreach( $avail_tags as $tag ) : ?>
+                                <option value="<?php echo $tag['tag_id'] ?>"><?php echo $tag['tag_name'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <p class="submit">
             <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?>">&nbsp;
             <input type="reset" name="reset" id="reset" class="button button-cancel" value="<?php _e( 'Zrušit', 'odwp-sendlane_plugin' ) ?>">
