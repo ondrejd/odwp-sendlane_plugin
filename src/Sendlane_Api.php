@@ -44,9 +44,9 @@ class Sendlane_Api {
      */
     public function __construct( $options ) {
         if (
-                ! is_array( $options ) ||
-                ! ( array_key_exists( 'api_key', $options ) &&
-                    array_key_exists( 'hash_key', $options ) )
+            ! is_array( $options ) ||
+            ! ( array_key_exists( 'api_key', $options ) &&
+                array_key_exists( 'hash_key', $options ) )
         ) {
             $options = odwpSendlanePlugin::get_default_options();
         }
@@ -76,6 +76,7 @@ class Sendlane_Api {
      */
     protected function call_server( $url, $get = false ) {
         $response = null;
+
         if( $get === true ) {
             $response = wp_remote_get( $url );
         } else {

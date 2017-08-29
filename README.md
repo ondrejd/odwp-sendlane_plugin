@@ -1,6 +1,6 @@
 # Sendlane Plugin
 
-Plugin that enables using [Sendlane][2] application in the [WordPress][1].
+Plugin that enables using [Sendlane][2] application for email automation in the [WordPress][1].
 
 ## Main features
 
