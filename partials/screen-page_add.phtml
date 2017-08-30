@@ -16,9 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /** @var array $avail_lists Available lists defined in Sendlane application. */
-$avail_lists = odwpSendlanePlugin::get_lists();
+$avail_lists = SP_Plugin::get_lists();
 /** @var array $avail_tags Available tags defined in Sendlane application. */
-$avail_tags  = odwpSendlanePlugin::get_tags();
+$avail_tags  = SP_Plugin::get_tags();
 /** @var boolean $api_error TRUE if API error occured. */
 $api_error   = array_key_exists( 'error', $avail_lists ) || array_key_exists( 'error', $avail_tags );
 

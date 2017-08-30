@@ -18,18 +18,26 @@ if( ! class_exists( 'SP_Options_Screen' ) ):
  * @since 1.0.0
  */
 class SP_Options_Screen extends SP_Screen_Prototype {
+
+    /**
+     * @const string
+     * @since 1.0.0
+     */
+    const SLUG = SP_SLUG . '-options_page';
+
     /**
      * Constructor.
      * @param WP_Screen $screen Optional.
      * @return void
      * @since 1.0.0
+     * @todo Setting `$this->slug` is just convience - {@see SP_Actions_List_Screen::SLUG} shwould be used anywhere.
      */
     public function __construct( \WP_Screen $screen = null ) {
         // Main properties
-        $this->slug = SP_SLUG . '-menu_options';
-        $this->menu_title = __( 'Sendlane Plugin', SP_SLUG );
-        //$this->page_title = __( 'Nastavení pro <em>Sendlane Plugin</em>', SP_SLUG );
-        $this->page_title = __( 'Nastavení pro Sendlane Plugin', SP_SLUG );
+        $this->slug = self::SLUG;
+        $this->menu_title = __( 'Nastavení', 'odwp-sendlane_plugin' );
+        //$this->page_title = __( 'Nastavení pro <em>Sendlane Plugin</em>', 'odwp-sendlane_plugin' );
+        $this->page_title = __( 'Nastavení pro Sendlane Plugin', 'odwp-sendlane_plugin' );
 
         // Specify help tabs
         $this->help_tabs = [];
@@ -52,12 +60,12 @@ class SP_Options_Screen extends SP_Screen_Prototype {
      */
     public function admin_menu() {
         $this->hookname = add_submenu_page(
-                SP_SLUG . '-menu',
+                SP_Actions_List_Screen::SLUG,
                 $this->page_title,
                 $this->menu_title,
                 'manage_options',
-                $this->slug,
-                [__CLASS__, 'render']//admin_options_page
+                self::SLUG,
+                [$this, 'render']
         );
 
         add_action( 'load-' . $this->hookname, [$this, 'screen_load'] );

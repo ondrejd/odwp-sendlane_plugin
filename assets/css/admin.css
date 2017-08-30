@@ -6,12 +6,12 @@
  */
 
 /* Admin menu icon */
-#adminmenu #toplevel_page_odwpsp-menu div.wp-menu-image::before {
+#adminmenu #toplevel_page_odwpsp-page_list div.wp-menu-image::before {
     content: '';
 }
 
 
-#adminmenu #toplevel_page_odwpsp-menu .wp-menu-image {
+#adminmenu #toplevel_page_odwpsp-page_list .wp-menu-image {
     background-image: url( "../img/sendlane-icons.png" ) !important;
     background-position: -20px 0px;
     background-repeat: no-repeat;
@@ -21,6 +21,6 @@
     margin: 7px 8px 7px 8px !important;
 }
 
-#adminmenu #toplevel_page_odwpsp-menu.wp-menu-open .wp-menu-image {
+#adminmenu #toplevel_page_odwpsp-page_list.wp-menu-open .wp-menu-image {
     background-position: 0px 0px;
 }

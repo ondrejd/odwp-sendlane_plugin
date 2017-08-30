@@ -16,22 +16,9 @@ if ( ! class_exists( 'SP_Plugin' ) ) :
 
 /**
  * Main class.
- *
- * @author Ondřej Doněk, <ondrejd@gmail.com>
- * @since 1.0
+ * @since 1.0.0
  */
 class SP_Plugin {
-    /**
-     * @const string Plugin's slug.
-     * @since 1.0.0
-     */
-    const SLUG = 'odwp-sendlane_plugin';
-
-    /**
-     * @const string Plugin's version.
-     * @since 1.0.0
-     */
-    const VERSION = '1.0.0';
 
     /**
      * @const string
@@ -201,6 +188,9 @@ class SP_Plugin {
         include( SP_PATH . 'src/Sendlane_Api_Call.php' );
         include( SP_PATH . 'src/Sendlane_Api_Calls.php' );
         include( SP_PATH . 'src/Sendlane_Api.php' );
+
+        // Initialize Sendlane API
+        self::$sendlane = new Sendlane_Api( $options );
     }
 
     /**
@@ -233,14 +223,14 @@ class SP_Plugin {
                 $section1,
                 __( 'Sendlane API', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_settings_section_1'],
-                self::SLUG
+                SP_SLUG
         );
 
         add_settings_field(
                 'api_key',
                 __( 'API klíč', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_api_key'],
-                self::SLUG,
+                SP_SLUG,
                 $section1
         );
 
@@ -248,7 +238,7 @@ class SP_Plugin {
                 'hash_key',
                 __( '<em>Hash</em> klíč', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_hash_key'],
-                self::SLUG,
+                SP_SLUG,
                 $section1
         );
 
@@ -256,7 +246,7 @@ class SP_Plugin {
                 'domain',
                 __( 'Doména', 'odwp-sendlane_plugin' ),
                 [__CLASS__, 'render_setting_domain'],
-                self::SLUG,
+                SP_SLUG,
                 $section1
         );
     }
@@ -268,15 +258,9 @@ class SP_Plugin {
      */
     protected static function init_screens() {
         include( SP_PATH . 'src/SP_Screen_Prototype.php' );
-        include( SP_PATH . 'src/SP_Options_Screen.php' );
         include( SP_PATH . 'src/SP_Actions_List_Screen.php' );
         include( SP_PATH . 'src/SP_Add_Action_Screen.php' );
-
-        /**
-         * @var SP_Options_Screen $options_screen
-         */
-        $options_screen = new SP_Options_Screen();
-        self::$admin_screens[$options_screen->get_slug()] = $options_screen;
+        include( SP_PATH . 'src/SP_Options_Screen.php' );
 
         /**
          * @var SP_Actions_List_Screen $actions_list_screen
@@ -289,6 +273,12 @@ class SP_Plugin {
          */
         $add_action_screen = new SP_Add_Action_Screen();
         self::$admin_screens[$add_action_screen->get_slug()] = $add_action_screen;
+
+        /**
+         * @var SP_Options_Screen $options_screen
+         */
+        $options_screen = new SP_Options_Screen();
+        self::$admin_screens[$options_screen->get_slug()] = $options_screen;
     }
 
     /**
@@ -297,7 +287,7 @@ class SP_Plugin {
      * @since 1.0.0
      */
     public static function admin_init() {
-        register_setting( self::SLUG, self::SETTINGS_KEY );
+        register_setting( SP_SLUG, self::SETTINGS_KEY );
 
         self::check_environment();
         self::init_settings();

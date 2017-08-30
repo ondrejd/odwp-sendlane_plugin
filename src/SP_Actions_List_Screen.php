@@ -18,17 +18,25 @@ if( ! class_exists( 'SP_Actions_List_Screen' ) ):
  * @since 1.0.0
  */
 class SP_Actions_List_Screen extends SP_Screen_Prototype {
+
+    /**
+     * @const string
+     * @since 1.0.0
+     */
+    const SLUG = SP_SLUG . '-page_list';
+
     /**
      * Constructor.
      * @param WP_Screen $screen Optional.
      * @return void
      * @since 1.0.0
+     * @todo Setting `$this->slug` is just convience - {@see SP_Actions_List_Screen::SLUG} shwould be used anywhere.
      */
     public function __construct( \WP_Screen $screen = null ) {
         // Main properties
-        $this->slug = SP_SLUG . '-menu';
-        $this->menu_title = __( 'Sendlane Plugin', SP_SLUG );
-        $this->page_title = __( 'Sendlane Plugin', SP_SLUG );
+        $this->slug = self::SLUG;
+        $this->menu_title = __( 'Sendlane Plugin', 'odwp-sendlane_plugin' );
+        $this->page_title = __( 'Sendlane Plugin', 'odwp-sendlane_plugin' );
 
         // Specify help tabs
         $this->help_tabs = [];
@@ -54,8 +62,8 @@ class SP_Actions_List_Screen extends SP_Screen_Prototype {
                 $this->page_title,
                 $this->menu_title,
                 'manage_options',
-                $this->slug,
-                [__CLASS__, 'render'],//render_admin_page_list
+                self::SLUG,
+                [$this, 'render'],
                 null,
                 100
         );
