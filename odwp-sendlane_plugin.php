@@ -49,7 +49,7 @@ if( ! defined( 'ABSPATH' ) ) {
 // Some constants
 defined( 'SP_SLUG' ) || define( 'SP_SLUG', 'odwpsp' );
 defined( 'SP_NAME' ) || define( 'SP_NAME', 'odwp-sendlane_plugin' );
-defined( 'DL_PATH' ) || define( 'DL_PATH', dirname( __FILE__ ) . '/' );
+defined( 'SP_PATH' ) || define( 'SP_PATH', dirname( __FILE__ ) . '/' );
 defined( 'SP_FILE' ) || define( 'SP_FILE', __FILE__ );
 defined( 'SP_LOG' )  || define( 'SP_LOG', WP_CONTENT_DIR . '/debug.log' );
 
@@ -66,7 +66,7 @@ if( ! function_exists( 'odwpsp_check_requirements' ) ) :
         global $wp_version;
 
         // Initialize locales
-        load_plugin_textdomain( SP_SLUG, false, DL_PATH . 'languages' );
+        load_plugin_textdomain( SP_SLUG, false, SP_PATH . 'languages' );
 
         /**
          * @var array Hold requirement errors
@@ -234,7 +234,7 @@ if( count( $odwpsp_errs ) > 0 ) {
     }
 } else {
     // Requirements are met so initialize the plugin.
-    include( DL_PATH . 'src/SP_Screen_Prototype.php' );
-    include( DL_PATH . 'src/SP_Plugin.php' );
+    include( SP_PATH . 'src/SP_Screen_Prototype.php' );
+    include( SP_PATH . 'src/SP_Plugin.php' );
     SP_Plugin::initialize();
 }

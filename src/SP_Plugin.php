@@ -12,15 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-// Some constants
-include( SP_PATH . 'src/Sendlane_Api.php' );
-include( SP_PATH . 'src/Sendlane_Api_Calls.php' );
-include( SP_PATH . 'src/Sendlane_Api_Call.php' );
-include( SP_PATH . 'src/Sendlane_Api_Call_Param.php' );
-include( SP_PATH . 'src/Actions_List.php' );
-include( SP_PATH . 'src/Actions_Table.php' );
-
-
 if ( ! class_exists( 'SP_Plugin' ) ) :
 
 /**
@@ -46,13 +37,25 @@ class SP_Plugin {
      * @const string
      * @since 1.0.0
      */
-    const SETTINGS_KEY = 'odwpsp_settings';
+    const SETTINGS_KEY = SP_SLUG . '_settings';
 
     /**
      * @const string
      * @since 1.0.0
      */
-    const TABLE_NAME = 'odwpsp';
+    const TABLE_NAME = SP_SLUG;
+
+    /**
+     * @var array $admin_screens Array with admin screens.
+     * @since 1.0.0
+     */
+    public static $admin_screens = [];
+
+    /**
+     * @var string
+     * @since 1.0.0
+     */
+    public static $options_page_hook;
 
     /**
      * @var Sendlane_Api $sendlane
@@ -89,21 +92,12 @@ class SP_Plugin {
     }
 
     /**
-     * @internal Deactivates the plugin directly by updating WP option `active_plugins`.
-     * @link https://developer.wordpress.org/reference/functions/deactivate_plugins/
+     * @internal Deactivates the plugin.
      * @return void
      * @since 1.0.0
-     * @todo Check if using `deactivate_plugins` whouldn't be better.
      */
-    public static function deactivate_raw() {
-        $active_plugins = get_option( 'active_plugins' );
-        $out = [];
-        foreach( $active_plugins as $key => $val ) {
-            if( $val != sprintf( "%$1s/%$1s.php", self::SLUG ) ) {
-                $out[$key] = $val;
-            }
-        }
-        update_option( 'active_plugins', $out );
+    public static function deactivate() {
+        //...
     }
 
     /**
@@ -146,18 +140,18 @@ class SP_Plugin {
     /**
      * Returns value of option with given key.
      * @param string $key Option's key.
+     * @param mixed $default Option's default value.
      * @return mixed Option's value.
      * @since 1.0.0
-     * @throws Exception Whenever option with given key doesn't exist.
      */
-    public static function get_option( $key ) {
+    public static function get_option( $key, $default = null ) {
         $options = self::get_options();
 
-        if( ! array_key_exists( $key, $options ) ) {
-            throw new Exception( 'Option "'.$key.'" is not set!' );
+        if( array_key_exists( $key, $options ) ) {
+            return $options[$key];
         }
 
-        return $options[$key];
+        return $default;
     }
 
     /**
@@ -165,16 +159,18 @@ class SP_Plugin {
      * @return void
      * @since 1.0.0
      */
-    public static function init() {
-        register_activation_hook( __FILE__, [__CLASS__, 'activate'] );
-        register_uninstall_hook( __FILE__, [__CLASS__, 'uninstall'] );
+    public static function initialize() {
+        register_activation_hook( SP_FILE, [__CLASS__, 'activate'] );
+        register_deactivation_hook( SP_FILE, [__CLASS__, 'deactivate'] );
+        register_uninstall_hook( SP_FILE, [__CLASS__, 'uninstall'] );
 
-        add_action( 'init', [__CLASS__, 'init_textdomain'] );
+        add_action( 'init', [__CLASS__, 'init'] );
         add_action( 'admin_init', [__CLASS__, 'admin_init'] );
         add_action( 'admin_menu', [__CLASS__, 'admin_menu'] );
+        add_action( 'admin_bar_menu', [__CLASS__, 'admin_menu_bar'], 100 );
         add_action( 'plugins_loaded', [__CLASS__, 'plugins_loaded'] );
         add_action( 'wp_enqueue_scripts', [__CLASS__, 'enqueue_scripts'] );
-        add_action( 'admin_enqueue_scripts', [__CLASS__, 'admin_enqueue_scripts'], 10 );
+        add_action( 'admin_enqueue_scripts', [__CLASS__, 'admin_enqueue_scripts'] );
     }
 
     /**
@@ -182,22 +178,52 @@ class SP_Plugin {
      * @return void
      * @since 1.0.0
      */
-    public static function init_textdomain() {
+    public static function init() {
+        // Initialize locales
         $path = SP_PATH . 'languages';
-        load_plugin_textdomain( self::SLUG, false, $path );
+        load_plugin_textdomain( SP_SLUG, false, $path );
+
+        // Initialize options
+        $options = self::get_options();
+
+        // Initialize custom post types
+        self::init_custom_post_types();
+
+        // Initialize shortcodes
+        self::init_shortcodes();
+
+        // Load Sendlane API sources
+        include( SP_PATH . 'src/Sendlane_Api_Call_Param.php' );
+        include( SP_PATH . 'src/Sendlane_Api_Call.php' );
+        include( SP_PATH . 'src/Sendlane_Api_Calls.php' );
+        include( SP_PATH . 'src/Sendlane_Api.php' );
     }
 
     /**
-     * Hook for "admin_init" action.
+     * Initialize custom post types.
      * @return void
      * @since 1.0.0
      */
-    public static function admin_init() {
-        register_setting( self::SLUG, self::SETTINGS_KEY );
+    public static function init_custom_post_types() {
+        //...
+    }
 
-        $options = self::get_options();
-        self::$sendlane = new Sendlane_Api( $options );
+    /**
+     * Registers our shortcodes.
+     * @return void
+     * @since 1.0.O
+     */
+    public static function init_shortcodes() {
+        //...
+    }
 
+    /**
+     * Initialize settings using <b>WordPress Settings API</b>.
+     * @link https://developer.wordpress.org/plugins/settings/settings-api/
+     * @return void
+     * @since 1.0.0
+     */
+    protected static function init_settings() {
         $section1 = self::SETTINGS_KEY . '_section_1';
         add_settings_section(
                 $section1,
@@ -232,36 +258,78 @@ class SP_Plugin {
     }
 
     /**
+     * Initialize admin screens.
+     * @return void
+     * @since 1.0.0
+     */
+    protected static function init_screens() {
+        include( DL_PATH . 'src/SP_Screen_Prototype.php' );
+        include( DL_PATH . 'src/SP_Options_Screen.php' );
+        include( DL_PATH . 'src/SP_Actions_List_Screen.php' );
+        include( DL_PATH . 'src/SP_Add_Action_Screen.php' );
+
+        /**
+         * @var SP_Options_Screen $options_screen
+         */
+        $options_screen = new SP_Options_Screen();
+        self::$admin_screens[$options_screen->get_slug()] = $options_screen;
+
+        /**
+         * @var SP_Actions_List_Screen $actions_list_screen
+         */
+        $actions_list_screen = new SP_Actions_List_Screen();
+        self::$admin_screens[$actions_list_screen->get_slug()] = $actions_list_screen;
+
+        /**
+         * @var SP_Add_Action_Screen $add_action_screen
+         */
+        $add_action_screen = new SP_Add_Action_Screen();
+        self::$admin_screens[$add_action_screen->get_slug()] = $add_action_screen;
+    }
+
+    /**
+     * Hook for "admin_init" action.
+     * @return void
+     * @since 1.0.0
+     */
+    public static function admin_init() {
+        register_setting( self::SLUG, self::SETTINGS_KEY );
+
+        self::check_environment();
+        self::init_settings();
+        self::screens_call_method( 'admin_init' );
+        self::admin_init_widgets();
+    }
+
+    /**
+     * @internal Initializes WP admin dashboard widgets.
+     * @return void
+     * @since 1.0.0
+     */
+    public static function admin_init_widgets() {
+        include( SP_PATH . 'src/SP_Dashboard_Widget.php' );
+        add_action( 'wp_dashboard_setup', ['SP_Dashboard_Widget', 'init'] );
+    }
+
+    /**
      * Hook for "admin_menu" action.
      * @return void
      * @since 1.0.0
      */
     public static function admin_menu() {
-        add_menu_page(
-                __( 'Sendlane plugin', 'odwp-sendlane_plugin' ),
-                __( 'Sendlane plugin', 'odwp-sendlane_plugin' ),
-                'manage_options',
-                'odwpsp_menu',
-                [__CLASS__, 'render_admin_page_list'],
-                null,
-                100
-        );
-        add_submenu_page(
-                'odwpsp_menu',
-                __( 'Přidat akci', 'odwp-sendlane_plugin' ),
-                __( 'Přidat akci', 'odwp-sendlane_plugin' ),
-                'manage_options',
-                'odwpsp_menu_add',
-                [__CLASS__, 'render_admin_page_add']
-        );
-        add_submenu_page(
-                'odwpsp_menu',
-                __( 'Nastavení pro Sendlane plugin', 'odwp-sendlane_plugin' ),
-                __( 'Nastavení', 'odwp-sendlane_plugin' ),
-                'manage_options',
-                'odwpsp_menu_options',
-                [__CLASS__, 'admin_options_page']
-        );
+        // Call action for `admin_menu` hook on all screens.
+        self::screens_call_method( 'admin_menu' );
+    }
+
+    /**
+     * Hook for "admin_menu_bar" action.
+     * @link https://codex.wordpress.org/Class_Reference/WP_Admin_Bar/add_menu
+     * @param \WP_Admin_Bar $bar
+     * @return void
+     * @since 1.0.0
+     */
+    public static function admin_menu_bar( \WP_Admin_Bar $bar ) {
+        //...
     }
 
     /**
@@ -271,20 +339,35 @@ class SP_Plugin {
      * @since 1.0.0
      */
     public static function admin_enqueue_scripts( $hook ) {
-        wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/admin.js', __FILE__ ), ['jquery'] );
-        wp_localize_script( self::SLUG, 'odwpsp', [
+        wp_enqueue_script( SP_SLUG, plugins_url( 'assets/js/admin.js', SP_FILE ), ['jquery'] );
+        wp_localize_script( SP_SLUG, 'odwpsp', [
             //...
         ] );
-        wp_enqueue_style( self::SLUG, plugins_url( 'assets/css/admin.css', __FILE__ ) );
+        wp_enqueue_style( SP_SLUG, plugins_url( 'assets/css/admin.css', SP_FILE ) );
     }
 
     /**
-     * Renders plugin's options page.
+     * Checks environment we're running and prints admin messages if needed.
      * @return void
      * @since 1.0.0
      */
-    public static function admin_options_page() {
-        echo self::load_template( 'screen-options_page' );
+    public static function check_environment() {
+        //...
+    }
+
+    /**
+     * Loads specified template with given arguments.
+     * @param string $template
+     * @param array  $args (Optional.)
+     * @return string Output created by rendering template.
+     * @since 1.0.0
+     */
+    public static function load_template( $template, array $args = [] ) {
+        extract( $args );
+        $path = sprintf( '%spartials/%s.phtml', SP_PATH, $template );
+        ob_start( function() {} );
+        include( $path );
+        return ob_get_flush();
     }
 
     /**
@@ -302,7 +385,11 @@ class SP_Plugin {
      * @since 1.0.0
      */
     public static function enqueue_scripts() {
-        //...
+        wp_enqueue_script( SP_SLUG, plugins_url( 'assets/js/public.js', SP_FILE ), ['jquery'] );
+        wp_localize_script( SP_SLUG, 'odwpsp', [
+            //...
+        ] );
+        wp_enqueue_style( SP_SLUG, plugins_url( 'assets/css/public.css', SP_FILE ) );
     }
 
     /**
@@ -357,24 +444,6 @@ class SP_Plugin {
     }
 
     /**
-     * Renders plugin's administration page "List pages".
-     * @return void
-     * @since 1.0.0
-     */
-    public static function render_admin_page_list() {
-        echo self::load_template( 'screen-page_list' );
-    }
-
-    /**
-     * Renders plugin's administration page "Add page".
-     * @return void
-     * @since 1.0.0
-     */
-    public static function render_admin_page_add() {
-        echo self::load_template( 'screen-page_add' );
-    }
-
-    /**
      * @internal Uninstalls the plugin.
      * @return void
      * @since 1.0.0
@@ -384,36 +453,53 @@ class SP_Plugin {
             return;
         }
 
-        // Nothing to do...
+        //...
     }
 
     /**
-     * @internal Prints user notice in correct WP amin style.
+     * @internal Prints error message in correct WP amin style.
      * @param string $msg Error message.
-     * @param string $type (Optional.) One of ['info','updated','error'].
-     * @param boolean $dismissable (Optional.) Should be message dissmissable?
+     * @param string $type (Optional.) One of ['error','info','success','warning'].
+     * @param boolean $dismissible (Optional.) Is notice dismissible?
      * @return void
      * @since 1.0.0
      */
-    protected static function print_notice( $msg, $type = 'info', $dismissable = true ) {
-        $avail_types = ['error', 'info', 'updated'];
-        $_type = in_array( $type, $avail_types ) ? $type : 'info';
-        printf( '<div class="%s"><p>%s</p></div>', $_type, $msg );
+    public static function print_admin_notice( $msg, $type = 'info', $dismissible = true ) {
+        $class = 'notice';
+
+        if( in_array( $type, ['error','info','success','warning'] ) ) {
+            $class .= ' notice-' . $type;
+        } else {
+            $class .= ' notice-info';
+        }
+
+        if( $dismissible === true) {
+            $class .= ' s-dismissible';
+        }
+        
+        printf( '<div class="%s"><p>%s</p></div>', $class, $msg );
     }
 
     /**
-     * @internal Loads specified template with given arguments.
-     * @param string $template
-     * @param array  $args (Optional.)
-     * @return string Output created by rendering template.
+     * On all screens call method with given name.
+     *
+     * Used for calling hook's actions of the existing screens.
+     * See {@see SP_Plugin::admin_menu} for an example how is used.
+     *
+     * If method doesn't exist in the screen object it means that screen
+     * do not provide action for the hook.
+     *
+     * @access private
+     * @param  string  $method
+     * @return void
      * @since 1.0.0
      */
-    protected static function load_template( $template, array $args = [] ) {
-        extract( $args );
-        $path = sprintf( '%spartials/%s.phtml', SP_PATH, $template );
-        ob_start( function() {} );
-        include( $path );
-        return ob_get_flush();
+    private static function screens_call_method( $method ) {
+        foreach ( self::$admin_screens as $slug => $screen ) {
+            if( method_exists( $screen, $method ) ) {
+                call_user_func( [ $screen, $method ] );
+            }
+        }
     }
 }
 

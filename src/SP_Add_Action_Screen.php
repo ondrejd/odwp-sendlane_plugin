@@ -11,13 +11,13 @@ if( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if( ! class_exists( 'SP_Options_Screen' ) ):
+if( ! class_exists( 'SP_Actions_List_Screen' ) ):
 
 /**
  * Administration screen for plugin's options.
  * @since 1.0.0
  */
-class SP_Options_Screen extends SP_Screen_Prototype {
+class SP_Actions_List_Screen extends SP_Screen_Prototype {
     /**
      * Constructor.
      * @param WP_Screen $screen Optional.
@@ -26,10 +26,9 @@ class SP_Options_Screen extends SP_Screen_Prototype {
      */
     public function __construct( \WP_Screen $screen = null ) {
         // Main properties
-        $this->slug = SP_SLUG . '-menu_options';
-        $this->menu_title = __( 'Sendlane Plugin', SP_SLUG );
-        //$this->page_title = __( 'Nastavení pro <em>Sendlane Plugin</em>', SP_SLUG );
-        $this->page_title = __( 'Nastavení pro Sendlane Plugin', SP_SLUG );
+        $this->slug = SP_SLUG . '-menu_add';
+        $this->menu_title = __( 'Přidat akci', SP_SLUG );
+        $this->page_title = __( 'Přidat akci', SP_SLUG );
 
         // Specify help tabs
         $this->help_tabs = [];
@@ -57,7 +56,7 @@ class SP_Options_Screen extends SP_Screen_Prototype {
                 $this->menu_title,
                 'manage_options',
                 $this->slug,
-                [__CLASS__, 'render']//admin_options_page
+                [__CLASS__, 'render']
         );
 
         add_action( 'load-' . $this->hookname, [$this, 'screen_load'] );

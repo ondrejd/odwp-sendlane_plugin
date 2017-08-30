@@ -7,6 +7,7 @@ Plugin that enables using [Sendlane][2] application for email automation in the 
 - full implementation of [the Sendlane API][3]
 - actions that can be triggered when page is loaded
 - widget for the subscription management
+- dashboard widget with statistics about usage of [Sendlane][2]
 
 ## Screenhots
 
