@@ -70,7 +70,7 @@ class SP_Dashboard_Widget {
      * @since 1.0.0
      */
     public static function widget() {
-        SP_Plugin::load_template( 'dashboard_widget', [] );
+        echo SP_Plugin::load_template( 'dashboard_widget', [] );
     }
 
     /**
@@ -80,7 +80,7 @@ class SP_Dashboard_Widget {
      * @since 1.0.0
      */
     public static function config() {
-        SP_Plugin::load_template( 'dashboard_widget-config', [] );
+        echo SP_Plugin::load_template( 'dashboard_widget-config', [] );
     }
 
     /**
