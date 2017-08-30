@@ -11,13 +11,13 @@ if( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if( ! class_exists( 'SP_Actions_List_Screen' ) ):
+if( ! class_exists( 'SP_Add_Action_Screen' ) ):
 
 /**
- * Administration screen for plugin's options.
+ * Add action administration screen.
  * @since 1.0.0
  */
-class SP_Actions_List_Screen extends SP_Screen_Prototype {
+class SP_Add_Action_Screen extends SP_Screen_Prototype {
     /**
      * Constructor.
      * @param WP_Screen $screen Optional.

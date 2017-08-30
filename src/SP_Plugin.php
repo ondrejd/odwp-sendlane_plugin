@@ -192,6 +192,10 @@ class SP_Plugin {
         // Initialize shortcodes
         self::init_shortcodes();
 
+        // Initialize admin sceens
+        self::init_screens();
+        self::screens_call_method( 'init' );
+
         // Load Sendlane API sources
         include( SP_PATH . 'src/Sendlane_Api_Call_Param.php' );
         include( SP_PATH . 'src/Sendlane_Api_Call.php' );
@@ -263,10 +267,10 @@ class SP_Plugin {
      * @since 1.0.0
      */
     protected static function init_screens() {
-        include( DL_PATH . 'src/SP_Screen_Prototype.php' );
-        include( DL_PATH . 'src/SP_Options_Screen.php' );
-        include( DL_PATH . 'src/SP_Actions_List_Screen.php' );
-        include( DL_PATH . 'src/SP_Add_Action_Screen.php' );
+        include( SP_PATH . 'src/SP_Screen_Prototype.php' );
+        include( SP_PATH . 'src/SP_Options_Screen.php' );
+        include( SP_PATH . 'src/SP_Actions_List_Screen.php' );
+        include( SP_PATH . 'src/SP_Add_Action_Screen.php' );
 
         /**
          * @var SP_Options_Screen $options_screen
