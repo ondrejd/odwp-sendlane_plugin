@@ -1,0 +1,25 @@
+<?php
+/**
+ * @author Ondřej Doněk <ondrejd@gmail.com>
+ * @link https://github.com/ondrejd/odwp-sendlane_plugin for the canonical source repository
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License 3.0
+ * @package odwp-sendlane_plugin
+ * @see SP_Add_Action_Screen::__construct()
+ * @since 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+?><p><?php printf( __( 'Na této můžete přidat akci dle <a href="%1$s" target="_blank">Sendlane API</a>, která se má provést na vybrané stránce. Volitelně můžete přidat <code>GET</code> nebo <code>POST</code> parametr, který bude ke spuštění akce také vyžadovaný &ndash; odeslání těchto parametrů můžete dosáhnout pomocí formulářů či (v případě <code>GET</code> dotazů) pouhých odkazů &ndash; ty můžete vytvořit standardními <a href="%2$s" target="_blank">WordPress</a> prostředky či prostřednictvím pluginů. U některých akcí <a href="%1$s" target_blank">Sendlane API</a> je to dokonce povinné - viz. formulářová část <b>Dodatečné nastavení akce</b>.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/', 'https://wordpress.org/'
+) ?></p>
+<h4><?php _e( 'Parametry formuláře', 'odwp-sendlane_plugin' ) ?></h4>
+<dl>
+    <dt><?php _e( 'Stránka', 'odwp-sendlane_plugin' ) ?></dt>
+    <dd><?php _e( 'Cílová stránka při jejímž načtení se má <a href="%1$s" target="_blank">Sendlane API</a> akce spustit.', 'odwp-sendlane_plugin' ) ?></dd>
+    <dt><?php _e( 'Akce', 'odwp-sendlane_plugin' ) ?></dt>
+    <dd><?php _e( 'Zvolená akce <a href="%s" target="_blank">Sendlane API</a>, kterou chcete spustit na této stránce &ndash; pokud by jste náhodou chtěli na té samé stránce spustit více akcí, stačí novou akci definovat pomocí formuláře a zvolit stejnou stránku. Zvolit můžete jen některé z dostupných akcí a ke všem jsou připojeny základní parametry (<code>api_key</code> a <code>hash_key</code>).', 'odwp-sendlane_plugin' ) ?></dd>
+</dl>
+<h4><?php _e( 'Dodatečné nastavení akce', 'odwp-sendlane_plugin' ) ?></h4>
+<p>...</p>

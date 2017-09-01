@@ -9,8 +9,11 @@
  *
  * @todo Add `wpnonce` for the security!
  * @todo Argument "child_of" for {@see get_pages()} and {@see get_posts()} should be set by user options!
+ * @todo For now we have only JS version so we should display admin notice if JS is not present.
+ * @todo Second part of form should be displayed after Sendlane API action is choosed and set up via JavaScript.
+ * @todo Save the form!
  */
-
+                
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -49,9 +52,6 @@ endif;
     <h1><?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?></h1>
     <?php odwpsp_print_options_errors( $avail_lists ) ?>
     <?php odwpsp_print_options_errors( $avail_tags ) ?>
-    <!-- TODO Přesunout do screen help tabu!!! -->
-    <p><?php printf( __( 'Zde můžete přidat akci dle <a href="%1$s" target="_blank">Sendlane API</a>, která se má provést na vybrané stránce. Volitelně můžete přidat <code>GET</code> nebo <code>POST</code> parametr, který bude ke spuštění akce také vyžadovaný &ndash; odeslání těchto parametrů můžete dosáhnout pomocí formulářů či (v případě <code>GET</code> dotazů) pouhých odkazů &ndash; ty můžete vytvořit standardními <a href="%2$s" target="_blank">WordPress</a> prostředky či prostřednictvím pluginů. U některých akcí <a href="%1$s" target_blank">Sendlane API</a> je to dokonce povinné.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/', 'https://wordpress.org/' ) ?></p>
-    <!-- // TODO Přesunout do screen help tabu!!! -->
     <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
         <input type="hidden" name="_wpnonce" value="">
         <table class="form-table">
@@ -60,15 +60,12 @@ endif;
                     <th scope="row">
                         <label for="odwpsp-page"><?php _e( 'Stránka', 'odwp-sendlane_plugin' ) ?></label>
                     </th>
-                    <td>
-                        <?php wp_dropdown_pages( [
+                    <td><?php wp_dropdown_pages( [
                             'id'    => 'odwpsp-page',
                             'name'  => 'page',
                             'echo'  => true,
                             'class' => 'odwpsp-page_select',
-                        ] ) ?>
-                        <p class="description"><?php printf( __( 'Vyberte cílovou stránku - stránka při jejímž načtení se má <a href="%s" target="_blank">Sendlane API</a> akce spustit.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/' ) ?></p>
-                    </td>
+                        ] ) ?></td>
                 </tr>
                 <tr>
                     <th scope="row">
@@ -86,19 +83,10 @@ endif;
                             <option value="<?php echo  $call->get_name() ?>"><?php echo  $call->get_name() ?></option>
                             <?php endforeach ?>
                         </select>
-                        <p class="description"><?php printf( __( 'Vyberte jednu z akcí <a href="%s" target="_blank">Sendlane API</a>, kterou chcete spustit na této stránce &ndash; pokud by jste náhodou chtěli na té samé stránce spustit více akcí, stačí novou akci definovat pomocí formuláře a zvolit stejnou stránku. Zvolit můžete jen některé z dostupných akcí a ke všem jsou připojeny základní parametry (<code>api_key</code> a <code>hash_key</code>).', 'odwp-sendlane_api' ), null ) ?></p>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <!-- TODO -->
-        <p style="color: #f30; font-weight: bold; margin: 0;">V praxi by se toto mělo zobrazovat až po vybrání akce a také by se mělo kontrolovat, zda jsou data načtená či ne.</p>
-        <ul style="color: #f30; font-weight: bold; list-style: square; margin: 0 0 0 1em;">
-            <li>přes <em>AJAX</em> zobrazovat detaily o daném volání (popis a parametry)</li>
-            <li>přes <em>AJAX</em> nastavit zbytek formuláře dle vybraného volání</li>
-            <li>uložit formulář</li>
-        </ul>
-        <!-- //TODO -->
         <div id="odwpsp-additional_action_settings">
             <h2><?php _e( 'Dodatečné nastavení akce', 'odwp-sendlane_plugin' ) ?></h2>
             <table class="form-table">

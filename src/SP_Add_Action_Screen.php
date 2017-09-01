@@ -36,10 +36,14 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
         // Main properties
         $this->slug = self::SLUG;
         $this->menu_title = __( 'Přidat akci', 'odwp-sendlane_plugin' );
-        $this->page_title = __( 'Přidat akci', SP_SLUG );
+        $this->page_title = __( 'Přidat akci', 'odwp-sendlane_plugin' );
 
         // Specify help tabs
-        $this->help_tabs = [];
+        $this->help_tabs[] = [
+            'id'      => self::SLUG . '-add-action-helptab',
+            'title'   => __( 'Obecné', SP_SLUG ),
+            'content' => SP_Plugin::load_template( 'screen-page_add-help_tab' ),
+        ];
 
         // Specify help sidebars
         $this->help_sidebars = [];
