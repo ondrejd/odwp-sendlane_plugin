@@ -45,10 +45,10 @@ class Sendlane_Api_Call {
     protected $description;
 
     /**
-     * @var array $name
+     * @var Sendlane_Api_Call_Params $parameters
      * @since 1.0.0
      */
-    protected $arguments;
+    protected $parameters;
 
     /**
      * @var string $type Either {@see Sendlane_Api_Call::TYPE_GET} or {@see Sendlane_Api_Call::TYPE_POST}.
@@ -58,18 +58,18 @@ class Sendlane_Api_Call {
 
     /**
      * Constructor.
-     * @param string $name        Name of the API call.
-     * @param string $description Description of the API call.
-     * @param string $type        Either {@see Sendlane_Api_Call::TYPE_GET} or {@see Sendlane_Api_Call::TYPE_POST}.
-     * @param array  $arguments   Array describing API call arguments.
+     * @param string $name Name of the API call.
+     * @param string $desc Description of the API call.
+     * @param string $type Either {@see Sendlane_Api_Call::TYPE_GET} or {@see Sendlane_Api_Call::TYPE_POST}.
+     * @param Sendlane_Api_Call_Params $params Parameters of the API call.
      * @return void
      * @since 1.0.0
      */
-    public function __construct( $name, $description, $type, array $arguments ) {
+    public function __construct( $name, $desc, $type, Sendlane_Api_Call_Params $params ) {
         $this->name        = $name;
-        $this->description = $description;
+        $this->description = $desc;
         $this->type        = $type;
-        $this->arguments   = $arguments;
+        $this->parameters  = $params;
     }
 
     /**
@@ -97,11 +97,28 @@ class Sendlane_Api_Call {
     }
 
     /**
-     * @return array Array describing arguments of the API call.
+     * @return Sendlane_Api_Call_Params Parameters of the API call.
      * @since 1.0.0
      */
-    public function get_arguments() : array {
-        return $this->arguments;
+    public function get_parameters() : array {
+        return $this->parameters;
+    }
+
+    /**
+     * @return string JSON string describing the Sendlane API call.
+     * @since 1.0.0
+     */
+    public function to_json() : string {
+        $json = <<<JSON
+{
+    "description": "{$this->get_description()}",
+    "name": "{$this->get_name()}",
+    "parameters": "{$this->get_parameters()}",
+    "type": "{$this->get_description()}",
+}
+JSON;
+
+        return $json;
     }
 }
 

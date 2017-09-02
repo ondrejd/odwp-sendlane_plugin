@@ -33,34 +33,50 @@ class Sendlane_Api_Call_Param {
     const TYPE_STR = 1;
 
     /**
-     * @var string $name
+     * @var string $description Description of the Sendlane API call parameter.
+     * @since 1.0.0
+     */
+    protected $description = '';
+
+    /**
+     * @var string $name Name of the Sendlane API call parameter.
      * @since 1.0.0
      */
     protected $name;
 
     /**
-     * @var int $type
-     * @since 1.0.0
-     */
-    protected $type = self::TYPE_STR;
-
-    /**
-     * @var bool $required
+     * @var bool $required Is parameter of the Sendlane API call required?
      * @since 1.0.0
      */
     protected $required = false;
+
+    /**
+     * @var int $type Type of the Sendlane API call parameter.
+     * @since 1.0.0
+     */
+    protected $type = self::TYPE_STR;
 
     /**
      * Constructor.
      * @param string  $name      Name of the parameter.
      * @param integer $type      Parameter's type ({@see Sendlane_Api_Call_Param::TYPE_INT} or {@see Sendlane_Api_Call_Param::TYPE_INT}).
      * @param boolean $required  TRUE if parameter is required.
+     * @param string  $desc      Description of the parameter.
      * @return void
      */
-    public function __construct( $name, int $type, bool $required ) {
+    public function __construct( $name, int $type, bool $required, string $desc ) {
+        $this->description = $desc;
         $this->name = $name;
-        $this->type = $type;
         $this->required = $required;
+        $this->type = $type;
+    }
+
+    /**
+     * @return string Parameter's description.
+     * @since 1.0.0
+     */
+    public function get_description() : string {
+        return $this->description;
     }
 
     /**
@@ -72,19 +88,19 @@ class Sendlane_Api_Call_Param {
     }
 
     /**
-     * @return int Parameter's type ({@see Sendlane_Api_Call_Param::TYPE_INT} or {@see Sendlane_Api_Call_Param::TYPE_INT}).
-     * @since 1.0.0
-     */
-    public function get_type() : int {
-        return $this->type;
-    }
-
-    /**
      * @return bool TRUE if parameter is required.
      * @since 1.0.0
      */
     public function get_required() : bool {
         return $this->required;
+    }
+
+    /**
+     * @return int Parameter's type ({@see Sendlane_Api_Call_Param::TYPE_INT} or {@see Sendlane_Api_Call_Param::TYPE_STR}).
+     * @since 1.0.0
+     */
+    public function get_type() : int {
+        return $this->type;
     }
 }
 
