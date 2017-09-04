@@ -24,6 +24,8 @@ $avail_lists = SP_Plugin::get_lists();
 $avail_tags  = SP_Plugin::get_tags();
 /** @var boolean $api_error TRUE if API error occured. */
 $api_error   = array_key_exists( 'error', $avail_lists ) || array_key_exists( 'error', $avail_tags );
+/** @var Sendlane_Api_Calls $api_calls Object describing all Sendlane API actions. */
+$api_calls = new Sendlane_Api_Calls();
 
 
 if( ! function_exists( 'odwpsp_print_options_errors' ) ) :
@@ -52,6 +54,49 @@ endif;
     <h1><?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?></h1>
     <?php odwpsp_print_options_errors( $avail_lists ) ?>
     <?php odwpsp_print_options_errors( $avail_tags ) ?>
+    <script type="text/javascript">
+/**
+ * @param {String} aId
+ * @param {String} aName
+ * @returns {String} Returns <select> element for list_id.
+ */
+function odwpsp_create_list_id_select( aId, aName ) {
+    var html = '';
+    <?php if( $api_error === true ) : ?>
+    var err = "<?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?>";
+    html += '<select id="' + aId + '" name="' + aName + '" disabled="disabled"></select>';
+    html += '<p class="description" style="color: #f30;">' + err + '</p>';
+    <?php else : ?>
+    html += '<select id="' + aId + '" name="' + aName + '">';
+    <?php foreach( $avail_lists as $list ) : ?>
+    html += '<option value="<?php echo $list['list_id'] ?>"><?php echo $list['list_name'] ?></option>';
+    <?php endforeach ?>
+    html += '</select>';
+    <?php endif ?>
+    return html;
+}
+
+/**
+ * @param {String} aId
+ * @param {String} aName
+ * @returns {String} Returns <select> element for tag_id.
+ */
+function odwpsp_create_tag_id_select( aId, aName ) {
+    var html = '';
+    <?php if( $api_error === true ) : ?>
+    var err = "<?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?>";
+    html += '<select id="' + aId + '" name="' + aName + '" disabled="disabled"></select>';
+    html += '<p class="description" style="color: #f30;">' + err + '</p>';
+    <?php else : ?>
+    html += '<select id="' + aId + '" name="' + aName + '" multiple="multiple">';
+    <?php foreach( $avail_tags as $tag ) : ?>
+    html += '<option value="<?php echo $tag['tag_id'] ?>"><?php echo $tag['tag_name'] ?></option>';
+    <?php endforeach ?>
+    html += '</select>';
+    <?php endif ?>
+    return html;
+}
+    </script>
     <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
         <input type="hidden" name="_wpnonce" value="">
         <table class="form-table">
@@ -73,61 +118,17 @@ endif;
                     </th>
                     <td>
                         <select id="odwpsp-action" name="action">
-                            <!--<option value="subscribe"><?php _e( 'Přihlásit', 'odwp-sendlane_plugin' ) ?></option>
-                            <option value="unsubscribe"><?php _e( 'Odhlásit', 'odwp-sendlane_plugin' ) ?></option>
-                            <option value="tag_add"><?php _e( 'Přidat tag', 'odwp-sendlane_plugin' ) ?></option>
-                            <option value="tag_remove"><?php _e( 'Odebrat tag', 'odwp-sendlane_plugin' ) ?></option>-->
+                            <option value="-1" selected="selected"><?php _e( 'Vyberte akci…', 'odwp-sendlane_plugin' ) ?></option>
                             <?php
-                            $calls = new Sendlane_Api_Calls();
-                            foreach( $calls as $call_key => $call ) : ?>
-                            <option value="<?php echo  $call->get_name() ?>"><?php echo  $call->get_name() ?></option>
+                            foreach( $api_calls as $call_key => $api_call ) : ?>
+                            <option value="<?php echo  $api_call->get_name() ?>"><?php echo  $api_call->get_name() ?></option>
                             <?php endforeach ?>
                         </select>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div id="odwpsp-additional_action_settings">
-            <h2><?php _e( 'Dodatečné nastavení akce', 'odwp-sendlane_plugin' ) ?></h2>
-            <table class="form-table">
-                <tbody id="odwpsp-action_parameters_tbody">
-                    <tr class="odwpsp-lists_row">
-                        <th scope="row">
-                            <label for="odwpsp-lists"><?php _e( 'Seznam', 'odwp-sendlane_plugin' ) ?></label>
-                        </th>
-                        <td>
-                            <?php if( $api_error === true ) : ?>
-                            <select id="odwpsp-lists" name="lists" disabled="disabled"></select>
-                            <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
-                            <?php else : ?>
-                            <select id="odwpsp-lists" name="lists">
-                                <?php foreach( $avail_lists as $list ) : ?>
-                                <option value="<?php echo $list['list_id'] ?>"><?php echo $list['list_name'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <?php endif ?>
-                        </td>
-                    </tr>
-                    <tr class="odwpsp-tags_row">
-                        <th scope="row">
-                            <label for="odwpsp-tags"><?php _e( 'Tag', 'odwp-sendlane_plugin' ) ?></label>
-                        </th>
-                        <td>
-                            <?php if( $api_error === true ) : ?>
-                            <select id="odwpsp-tags" name="tags" disabled="disabled"></select>
-                            <p class="description" style="color: #f30;"><?php _e( 'Nastala chyba při získávání dat prostřednictvím <b>Sendlane API</b>!', 'odwp-sendlane_plugin' ) ?></p>
-                            <?php else : ?>
-                            <select id="odwpsp-tags" name="tags">
-                                <?php foreach( $avail_tags as $tag ) : ?>
-                                <option value="<?php echo $tag['tag_id'] ?>"><?php echo $tag['tag_name'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <?php endif ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div id="odwpsp-additional_action_settings"></div>
         <p class="submit">
             <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?>">&nbsp;
             <input type="reset" name="reset" id="reset" class="button button-cancel" value="<?php _e( 'Zrušit', 'odwp-sendlane_plugin' ) ?>">

@@ -55,10 +55,12 @@ class SP_Options_Screen extends SP_Screen_Prototype {
 
     /**
      * Action for `admin_menu` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_menu()
      * @since 1.0.0
      */
-    public function admin_menu() {
+    public function admin_menu( array $params = [] ) {
         $this->hookname = add_submenu_page(
                 SP_Actions_List_Screen::SLUG,
                 $this->page_title,

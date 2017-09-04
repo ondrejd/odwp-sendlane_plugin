@@ -58,10 +58,12 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
 
     /**
      * Action for `admin_menu` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_menu()
      * @since 1.0.0
      */
-    public function admin_menu() {
+    public function admin_menu( array $params = [] ) {
         $this->hookname = add_submenu_page(
                 SP_Actions_List_Screen::SLUG,
                 $this->page_title,
@@ -72,6 +74,27 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
         );
 
         add_action( 'load-' . $this->hookname, [$this, 'screen_load'] );
+    }
+
+    /**
+     * Action for `admin_enqueue_scripts` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
+     * @return void
+     * @see SP_Plugin::admin_enqueue_scripts()
+     * @since 1.0.0
+     */
+    public function admin_enqueue_scripts( array $params = [] ) {
+        if( $params['hook'] == $this->hookname ) {
+            wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/screen-page_add.js', SP_FILE ), ['jquery'] );
+            wp_localize_script( self::SLUG, 'odwpsp', [
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'defaults' => SP_Plugin::get_options(),
+                'i18n' => [
+                    'form_title' => __( 'Dodatečné nastavení akce <code>%s</code>', 'odwp-sendlane_plugin' ),
+                    'label_title' => __( 'Parametr <code>%s</code>', 'odwp-sendlane_plugin' ),
+                ],
+            ] );
+        }
     }
 }
 

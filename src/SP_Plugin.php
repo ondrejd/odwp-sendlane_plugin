@@ -169,28 +169,64 @@ class SP_Plugin {
         // Initialize locales
         $path = SP_PATH . 'languages';
         load_plugin_textdomain( SP_SLUG, false, $path );
-
         // Initialize options
         $options = self::get_options();
-
         // Initialize custom post types
         self::init_custom_post_types();
-
         // Initialize shortcodes
         self::init_shortcodes();
-
+        // Init AJAX
+        self::init_ajax();
         // Initialize admin sceens
         self::init_screens();
         self::screens_call_method( 'init' );
 
         // Load Sendlane API sources
         include( SP_PATH . 'src/Sendlane_Api_Call_Param.php' );
+        include( SP_PATH . 'src/Sendlane_Api_Call_Params.php' );
         include( SP_PATH . 'src/Sendlane_Api_Call.php' );
         include( SP_PATH . 'src/Sendlane_Api_Calls.php' );
         include( SP_PATH . 'src/Sendlane_Api.php' );
 
         // Initialize Sendlane API
         self::$sendlane = new Sendlane_Api( $options );
+    }
+
+    /**
+     * Initializes hooks for AJAX requests that are handled by the plugin.
+     * @return void
+     * @since 1.0.0
+     */
+    public static function init_ajax() {
+        add_action( 'wp_ajax_get_api_action', [__CLASS__, 'ajax_get_api_action'] );
+    }
+
+    /**
+     * Hook for "wp_ajax_get_api_action".
+     * @return void
+     * @see SP_Plugin::init_ajax()
+     * @since 1.0.0
+     */
+    public static function ajax_get_api_action() {
+        $api_action = filter_input( INPUT_POST, 'api_action' );
+        if( empty( $api_action ) ) {
+            _e( 'Nebyla specifikována žádná akce Sendlane API!', 'odwp-sendlane_plugin' );
+            wp_die();
+        }
+
+        $api_calls = new Sendlane_Api_Calls();
+        $api_call = $api_calls[ $api_action ];
+
+        if( ( $api_call instanceof Sendlane_Api_Call ) ) {
+            echo json_encode( $api_call->to_json() );
+        }
+        else {
+            echo json_encode( [
+                'error' => 'Action "' . $api_action . '" was not found!'
+            ] );
+        }
+
+        wp_die();
     }
 
     /**
@@ -336,8 +372,14 @@ class SP_Plugin {
         wp_enqueue_script( SP_SLUG, plugins_url( 'assets/js/admin.js', SP_FILE ), ['jquery'] );
         wp_localize_script( SP_SLUG, 'odwpsp', [
             //...
+            'defaults' => self::get_options(),
+            'i18n' => [
+                //...
+            ],
         ] );
         wp_enqueue_style( SP_SLUG, plugins_url( 'assets/css/admin.css', SP_FILE ) );
+
+        self::screens_call_method( 'admin_enqueue_scripts', [ 'hook' => $hook ] );
     }
 
     /**
@@ -484,14 +526,15 @@ class SP_Plugin {
      * do not provide action for the hook.
      *
      * @access private
-     * @param  string  $method
+     * @param  string  $method Name of the method..
+     * @param  array   $params (Optional.) Array with additional parameters.
      * @return void
      * @since 1.0.0
      */
-    private static function screens_call_method( $method ) {
+    private static function screens_call_method( $method, array $params = [] ) {
         foreach ( self::$admin_screens as $slug => $screen ) {
             if( method_exists( $screen, $method ) ) {
-                call_user_func( [ $screen, $method ] );
+                call_user_func( [ $screen, $method ], $params );
             }
         }
     }

@@ -215,46 +215,56 @@ abstract class SP_Screen_Prototype {
 
     /**
      * Action for `init` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::init()
      * @since 1.0.0
      */
-    public function init() {
+    public function init( array $params = [] ) {
         // ...
     }
 
     /**
      * Action for `admin_init` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_init()
      * @since 1.0.0
      */
-    public function admin_init() {
+    public function admin_init( array $params = [] ) {
         $this->save_screen_options();
     }
 
     /**
      * Action for `init` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_enqueue_scripts()
      * @since 1.0.0
      */
-    public function admin_enqueue_scripts() {
+    public function admin_enqueue_scripts( array $params = [] ) {
         // ...
     }
 
     /**
      * Action for `admin_head` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_head()
      * @since 1.0.0
      */
-    public function admin_head() {
+    public function admin_head( array $params = [] ) {
         // ...
     }
 
     /**
      * Action for `admin_menu` hook.
+     * @param  array $params (Optional.) Array with additional parameters.
      * @return void
+     * @see SP_Plugin::admin_menu()
      * @since 1.0.0
      */
-    abstract public function admin_menu();
+    abstract public function admin_menu( array $params = [] );
 
     /**
      * Creates screen help and add filter for screen options. Action 

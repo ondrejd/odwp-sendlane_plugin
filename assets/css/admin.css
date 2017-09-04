@@ -24,3 +24,8 @@
 #adminmenu #toplevel_page_odwpsp-page_list.wp-menu-open .wp-menu-image {
     background-position: 0px 0px;
 }
+
+h2 small {
+    font-weight: 100;
+    font-size: 90%;
+}
