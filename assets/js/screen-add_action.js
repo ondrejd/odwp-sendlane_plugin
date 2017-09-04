@@ -9,7 +9,7 @@
 jQuery( document ).ready( function( $ ) {
     
     /**
-     * @global Object odwpsp
+     * @global Object odwpsp1
      * Object {
      *      ajax_url: String,
      *      form_title: String,
@@ -32,16 +32,16 @@ jQuery( document ).ready( function( $ ) {
         var id   = 'odwpsp-action-param'  + aIndex;
 
         if( aParam.name == "api" ) {
-            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp.defaults.api_key + '" class="regular-text" disabled>';
+            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp1.defaults.api_key + '" class="regular-text" disabled>';
         }
         else if( aParam.name == "hash" ) {
-            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp.defaults.hash_key + '" class="regular-text" disabled>';
+            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp1.defaults.hash_key + '" class="regular-text" disabled>';
         }
         /**
          * @todo This is probably not needed.
          */
         else if( aParam.name == "domain" ) {
-            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp.defaults.domain + '" class="regular-text">';
+            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp1.defaults.domain + '" class="regular-text">';
         }
         else if( aParam.name == "list_id" ) {
             ret = odwpsp_create_list_id_select( id, name );
@@ -68,7 +68,7 @@ jQuery( document ).ready( function( $ ) {
      */
     var handleGetActionAjaxCall = function( aResponse ) {
         var action = JSON.parse( aResponse );
-        var title  = new String( odwpsp.i18n.form_title ).replace( "%s", action.name );
+        var title  = new String( odwpsp1.i18n.form_title ).replace( "%s", action.name );
         var html   = "" +
                 "<h2>" +
                     title +
@@ -84,7 +84,7 @@ jQuery( document ).ready( function( $ ) {
         for( var i = 0; i < action.parameters.length; i++ ) {
             var param = action.parameters[i];
             var input = getInputForActionParam( param, i );
-            var label = new String( odwpsp.i18n.label_title ).replace( "%s", param.name );
+            var label = new String( odwpsp1.i18n.label_title ).replace( "%s", param.name );
             params += "" +
                     '<tr>' +
                         '<th scope="row">' +
@@ -113,7 +113,7 @@ jQuery( document ).ready( function( $ ) {
         }
         else {
             jQuery.post(
-                    odwpsp.ajax_url,
+                    odwpsp1.ajax_url,
                     {
                         action: "get_api_action",
                         api_action: action

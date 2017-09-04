@@ -86,7 +86,7 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
     public function admin_enqueue_scripts( array $params = [] ) {
         if( $params['hook'] == $this->hookname ) {
             wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/screen-add_action.js', SP_FILE ), ['jquery'] );
-            wp_localize_script( self::SLUG, 'odwpsp', [
+            wp_localize_script( self::SLUG, 'odwpsp1', [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'defaults' => SP_Plugin::get_options(),
                 'i18n' => [
