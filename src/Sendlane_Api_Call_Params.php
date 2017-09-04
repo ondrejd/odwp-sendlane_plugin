@@ -51,10 +51,18 @@ class Sendlane_Api_Call_Params implements \ArrayAccess, \Iterator {
      * @since 1.0.0
      */
     public function merge( Sendlane_Api_Call_Params $params) : Sendlane_Api_Call_Params {
-        for( $i = 0; $i < count( $params ); $i++ ) {
+        for( $i = 0; $i < $params->count(); $i++ ) {
             $this->params[] = $params[$i];
         }
         return $this;
+    }
+
+    /**
+     * @return int Parameters count.
+     * @since 1.0.0
+     */
+    public function count() {
+        return count( $this->params );
     }
 
     /**
@@ -197,7 +205,7 @@ class Sendlane_Api_Call_Params implements \ArrayAccess, \Iterator {
         $json = '[';
 
         foreach( $this->params as /*Sendlane_Api_Call_Param*/$param ) {
-            $json .= ( strlen( $json ) > 0 ? ',' : '' ) . $param->to_json();
+            $json .= ( strlen( $json ) > 1 ? ',' : '' ) . $param->to_json();
         }
 
         return $json . ']';

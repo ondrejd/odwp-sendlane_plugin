@@ -100,7 +100,7 @@ class Sendlane_Api_Call {
      * @return Sendlane_Api_Call_Params Parameters of the API call.
      * @since 1.0.0
      */
-    public function get_parameters() : array {
+    public function get_parameters() : Sendlane_Api_Call_Params {
         return $this->parameters;
     }
 
@@ -113,8 +113,8 @@ class Sendlane_Api_Call {
 {
     "description": "{$this->get_description()}",
     "name": "{$this->get_name()}",
-    "parameters": "{$this->get_parameters()}",
-    "type": "{$this->get_description()}",
+    "parameters": {$this->get_parameters()->to_json()},
+    "type": "{$this->get_type()}"
 }
 JSON;
 

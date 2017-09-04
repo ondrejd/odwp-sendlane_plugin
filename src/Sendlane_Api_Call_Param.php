@@ -102,6 +102,27 @@ class Sendlane_Api_Call_Param {
     public function get_type() : int {
         return $this->type;
     }
+
+    /**
+     * Returns the parameter as a JSON string.
+     * @return string
+     * @since 1.0.0
+     */
+    public function to_json() : string {
+        $name = str_replace( '"', '&quot;', $this->name );
+        $desc = str_replace( '"', '&quot;', $this->description );
+        $json = <<<JSON
+
+    {
+        "name": "{$name}",
+        "description": "{$desc}",
+        "type": {$this->type},
+        "required": %s
+    }
+JSON;
+
+        return str_replace( '%s', $this->get_required() ? '1' : '0', $json );
+    }
 }
 
 endif;
