@@ -23,7 +23,7 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
      * @const string
      * @since 1.0.0
      */
-    const SLUG = SP_SLUG . '-page_add';
+    const SLUG = SP_SLUG . '-add_action';
 
     /**
      * Constructor.
@@ -41,7 +41,7 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
         // Specify help tabs
         $this->help_tabs[] = [
             'id'      => self::SLUG . '-add-action-helptab',
-            'title'   => __( 'Obecné', SP_SLUG ),
+            'title'   => __( 'Obecné', 'odwp-sendlane_plugin' ),
             'content' => SP_Plugin::load_template( 'screen-page_add-help_tab' ),
         ];
 
@@ -85,7 +85,7 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
      */
     public function admin_enqueue_scripts( array $params = [] ) {
         if( $params['hook'] == $this->hookname ) {
-            wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/screen-page_add.js', SP_FILE ), ['jquery'] );
+            wp_enqueue_script( self::SLUG, plugins_url( 'assets/js/screen-add_action.js', SP_FILE ), ['jquery'] );
             wp_localize_script( self::SLUG, 'odwpsp', [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'defaults' => SP_Plugin::get_options(),
