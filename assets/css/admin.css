@@ -12,13 +12,21 @@
 
 
 #adminmenu #toplevel_page_odwpsp-page_list .wp-menu-image {
-    background-image: url( "../img/sendlane-icons.png" ) !important;
+    background-image: url( "../img/icons-common.png" ) !important;
     background-position: -20px 0px;
     background-repeat: no-repeat;
     background-size: cover;
     height: 20px !important;
     width: 20px !important;
     margin: 7px 8px 7px 8px !important;
+}
+
+body.admin-color-light #adminmenu #toplevel_page_odwpsp-page_list .wp-menu-image {
+    background-image: url( "../img/icons-light.png" ) !important;
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_odwpsp-page_list .wp-menu-image {
+    background-image: url( "../img/icons-fresh.png" ) !important;
 }
 
 #adminmenu #toplevel_page_odwpsp-page_list.wp-menu-open .wp-menu-image {
