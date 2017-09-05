@@ -92,7 +92,7 @@ class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
                 new Sendlane_Api_Call_Param( 'list_name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'List name will be unique and it will be not allow duplicate list names.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'from_name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'From name may not be greater than 100 characters it will not allow regular expressions like <code>"/^[^\"<>@]+$/"</code>.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'from_name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'From name may not be greater than 100 characters and it will not allow regular expressions.', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'reply_email', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Reply email Yahoo/AOL reject emails that claim to come from yahoo/AOL but actually originate at non-Yahoo/AOL servers Valid email <code>name@domain</code> (<a href="http://blog.sendlane.com/important-announcement/" target="_blank">custom email domain required</a>)', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'default_reply_email', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Default Reply email Yahoo/AOL reject emails that claim to come from yahoo/AOL but actually originate at non-Yahoo/AOL servers. Valid email <code>name@domain</code> (<a href="http://blog.sendlane.com/important-announcement/" target="_blank">custom email domain required</a>)', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'subject', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the subject.', 'odwp-sendlane_plugin' ) ),
@@ -101,7 +101,7 @@ class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
                 new Sendlane_Api_Call_Param( 'address', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the address.', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'city', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the city.', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'zipcode', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the zipcode.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'country', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the country.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'country', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the country.', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'state', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the state.', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'phone', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter phone number Valid phone number – <code>9 digits no space,( ), -, +</code>', 'odwp-sendlane_plugin' ) )
             ) )
@@ -111,19 +111,19 @@ class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
             __( 'To update list.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params(new Sendlane_Api_Call_Params(
-                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( 'Zadejte <a href="http://help.sendlane.com/knowledgebase/api-docs/#list-id" target="_blank">platné <code>list id</code></a>.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'from_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'From name may not be greater than 100 characters it will not allow regular expressions like <code>"/^[^\"<>@]+$/"</code>.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'reply_email', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Reply email Yahoo/AOL reject emails that claim to come from yahoo/AOL but actually originate at non-Yahoo/AOL servers Valid email <code>name@domain</code> (<a href="http://blog.sendlane.com/important-announcement/" target="_blank">custom email domain required</a>)', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( 'Platné <a href="http://help.sendlane.com/knowledgebase/api-docs/#list-id" target="_blank"><code>list id</code></a>.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'from_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'From name may not be greater than 100 characters and it will not allow regular expressions.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'reply_email', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Reply email Yahoo/AOL reject emails that claim to come from yahoo/AOL but actually originate at non-Yahoo/AOL servers Valid email <code>name@domain</code> (<a href="http://blog.sendlane.com/important-announcement/" target="_blank">custom email domain required</a>)', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'default_reply_email', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Default Reply email Yahoo/AOL reject emails that claim to come from yahoo/AOL but actually originate at non-Yahoo/AOL servers. Valid email <code>name@domain</code> (<a href="http://blog.sendlane.com/important-announcement/" target="_blank">custom email domain required</a>)', 'odwp-sendlane_plugin' ) ),
                 new Sendlane_Api_Call_Param( 'subject', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the subject.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'short_reminder', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the description.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'company', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the company name.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'address', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the address.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'city', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the city.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'zipcode', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the zipcode.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'country', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the country.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'state', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the state.', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'phone', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter phone number Valid phone number – <code>9 digits no space,( ), -, +</code>', 'odwp-sendlane_plugin' ) )
+                new Sendlane_Api_Call_Param( 'short_reminder', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the description.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'company', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the company name.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'address', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the address.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'city', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the city.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'zipcode', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the zipcode.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'country', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the country.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'state', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the state.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'phone', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter phone number Valid phone number – <code>9 digits no space,( ), -, +</code>', 'odwp-sendlane_plugin' ) )
             ) )
         );
         $this->calls[] = new Sendlane_Api_Call(
@@ -154,50 +154,50 @@ class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
         );
         $this->calls[] = new Sendlane_Api_Call(
             'opt-in-create',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To create opt in form.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
-                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'form_name', Sendlane_Api_Call_Param::TYPE_STR, true, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'first_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'last_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'email', Sendlane_Api_Call_Param::TYPE_STR, true, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'send_opt_mail', Sendlane_Api_Call_Param::TYPE_INT, false, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'redirect_url', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) )
+                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'String should be like <code>1,2,3</code>', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'form_name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the form name.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'first_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the first name caption.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'last_name', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Enter the last name caption.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'email', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Enter the email caption.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'send_opt_mail', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'To send confirmation mail; <code>1-Yes,0-No</code>.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'redirect_url', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'To redirect thank you page.', 'odwp-sendlane_plugin' ) )
             ) )
         );
         $this->calls[] = new Sendlane_Api_Call(
             'subscriber-export',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To export Subscriber example.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
-                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'start', Sendlane_Api_Call_Param::TYPE_INT, false, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( '…', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'format', Sendlane_Api_Call_Param::TYPE_STR, false, __( '…', 'odwp-sendlane_plugin' ) )
+                new Sendlane_Api_Call_Param( 'list_id', Sendlane_Api_Call_Param::TYPE_INT, true, __( 'Platné <a href="http://help.sendlane.com/knowledgebase/api-docs/#list-id" target="_blank"><code>list id</code></a>.', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'start', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Starting Value of the Result (By default: <code>1</code>).', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Result Limit Per Result (By default: <code>10</code>).', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'format', Sendlane_Api_Call_Param::TYPE_STR, false, __( 'Supported format <code>CSV</code>, <code>text</code> (By default: <code>CSV</code>)', 'odwp-sendlane_plugin' ) )
             ) )
         );
         $this->calls[] = new Sendlane_Api_Call(
             'tags',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To get the list of tags.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
                 new Sendlane_Api_Call_Param( 'tag_id', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Tag id (<a href="http://help.sendlane.com/knowledgebase/api-docs/#tag-id" target="_blank">Valid tag_id #</a>)', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'start', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Starting Value of the Result (By default : 1)', 'odwp-sendlane_plugin' ) ),
-                new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Result Limit Per Result (By default : 10)', 'odwp-sendlane_plugin' ) )
+                new Sendlane_Api_Call_Param( 'start', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Starting Value of the Result (By default : <code>1</code>)', 'odwp-sendlane_plugin' ) ),
+                new Sendlane_Api_Call_Param( 'limit', Sendlane_Api_Call_Param::TYPE_INT, false, __( 'Result Limit Per Result (By default : <code>10</code>)', 'odwp-sendlane_plugin' ) )
             ) )
         );
         $this->calls[] = new Sendlane_Api_Call(
             'tag-create',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To create a new Tag.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
-                new Sendlane_Api_Call_Param( 'name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Tag name', 'odwp-sendlane_plugin' ) )
+                new Sendlane_Api_Call_Param( 'name', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Tag name.', 'odwp-sendlane_plugin' ) )
             ) )
         );
         $this->calls[] = new Sendlane_Api_Call(
             'tag-subscriber-add',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To add a tag to a single existing subscriber.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
                 new Sendlane_Api_Call_Param( 'email', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Subscriber email (Valid email name@domain)', 'odwp-sendlane_plugin' ) ),
@@ -207,7 +207,7 @@ class Sendlane_Api_Calls implements \ArrayAccess, \Iterator {
         );
         $this->calls[] = new Sendlane_Api_Call(
             'tag-subscriber-remove',
-            __( '…', 'odwp-sendlane_plugin' ),
+            __( 'To remove a single existing subscriber\'s tag.', 'odwp-sendlane_plugin' ),
             Sendlane_Api_Call::TYPE_POST,
             $this->params( new Sendlane_Api_Call_Params(
                 new Sendlane_Api_Call_Param( 'email', Sendlane_Api_Call_Param::TYPE_STR, true, __( 'Subscriber email (Valid email name@domain)', 'odwp-sendlane_plugin' ) ),

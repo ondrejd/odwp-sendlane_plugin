@@ -90,8 +90,12 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'defaults' => SP_Plugin::get_options(),
                 'i18n' => [
-                    'form_title' => __( 'Dodatečné nastavení akce <code>%s</code>', 'odwp-sendlane_plugin' ),
+                    'form_title' => __( 'Parametry akce', 'odwp-sendlane_plugin' ),
                     'label_title' => __( 'Parametr <code>%s</code>', 'odwp-sendlane_plugin' ),
+                    'info_title' => __( 'Vybraná akce', 'odwp-sendlane_plugin' ),
+                    'info_lbl1' => __( 'Název:', 'odwp-sendlane_plugin' ),
+                    'info_lbl2' => __( 'Popis:', 'odwp-sendlane_plugin' ),
+                    'info_lbl3' => __( 'Dokumentace:', 'odwp-sendlane_plugin' ),
                 ],
             ] );
         }

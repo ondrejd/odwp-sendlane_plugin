@@ -109,10 +109,12 @@ class Sendlane_Api_Call {
      * @since 1.0.0
      */
     public function to_json() : string {
+        $name = str_replace( '"', '&quot;', $this->name );
+        $desc = str_replace( '"', '&quot;', $this->description );
         $json = <<<JSON
 {
-    "description": "{$this->get_description()}",
-    "name": "{$this->get_name()}",
+    "description": "{$desc}",
+    "name": "{$name}",
     "parameters": {$this->get_parameters()->to_json()},
     "type": "{$this->get_type()}"
 }

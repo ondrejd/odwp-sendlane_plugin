@@ -7,7 +7,7 @@
  */
 
 jQuery( document ).ready( function( $ ) {
-    
+
     /**
      * @global Object odwpsp1
      * Object {
@@ -22,7 +22,22 @@ jQuery( document ).ready( function( $ ) {
      */
 
     /**
-     * Returns correct html input for the Sendlane API action's parameter.
+     * Returns HTML with info for the Sendlane API action.
+     * @param {Object} aAction
+     * @returns {String}
+     */
+    var getActionInfo = function( aAction ) {
+        var url = "http://help.sendlane.com/knowledgebase/api-docs/#" + aAction.name;
+        var ret = "";
+        ret += "<h2>" + odwpsp1.i18n.info_title + "</h2>";
+        ret += "<p>" + odwpsp1.i18n.info_lbl1 + " <code>" + aAction.name + "</code><br>";
+        ret += odwpsp1.i18n.info_lbl2 + " <em>" + aAction.description + "</em><br>";
+        ret += odwpsp1.i18n.info_lbl3 + ' <a href="' + url + '" target="_blank">' + url + '</a></p>';
+        return ret;
+    };
+
+    /**
+     * Returns correct HTML input for the Sendlane API action's parameter.
      * @param {Object} aParam
      * @returns {String}
      */
@@ -70,10 +85,8 @@ jQuery( document ).ready( function( $ ) {
         var action = JSON.parse( aResponse );
         var title  = new String( odwpsp1.i18n.form_title ).replace( "%s", action.name );
         var html   = "" +
-                "<h2>" +
-                    title +
-                    "<small>(" + action.description + ")</small>" +
-                "</h2>" +
+                getActionInfo( action ) +
+                "<h2>" + title + "</h2>" +
                 '<table class="form-table">' +
                     '<tbody id="odwpsp-action_parameters_tbody">' +
                         '%s' +
