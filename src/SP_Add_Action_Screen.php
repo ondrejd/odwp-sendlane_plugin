@@ -100,6 +100,46 @@ class SP_Add_Action_Screen extends SP_Screen_Prototype {
             ] );
         }
     }
+
+    /**
+     * Render page self.
+     * @param array $args (Optional.) Arguments for rendered template.
+     * @return void
+     * @since 1.0.0
+     */
+    public function render( $args = [] ) {
+        $args['messages'] = $this->process_form();
+
+        parent::render( $args );
+    }
+
+    /**
+     * @internal Process add action form.
+     * @return array
+     * @since 1.0.0
+     * @todo Check WP_nonce!!!
+     */
+    protected function process_form() {
+        $msgs = [];
+
+        $submit = filter_input( INPUT_POST, 'submit' );
+        if( empty( $submit ) ) {
+            return $msgs;
+        }
+
+        $data = [
+            'page' => filter_input( INPUT_POST, 'page' ),
+            'action' => filter_input( INPUT_POST, 'action' ),
+            'params' => filter_input( INPUT_POST, 'action-param', FILTER_DEFAULT , FILTER_REQUIRE_ARRAY ),
+        ];
+        // XXX Process add action form!
+echo '<pre>';
+var_dump( $_POST );
+var_dump( $data );
+exit();
+
+        return $msgs;
+    }
 }
 
 endif;

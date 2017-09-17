@@ -43,7 +43,7 @@ jQuery( document ).ready( function( $ ) {
      */
     var getInputForActionParam = function( aParam, aIndex ) {
         var ret  = '';
-        var name = 'odwpsp-action-param[' + aIndex + ']';
+        var name = 'action-param[' + aIndex + ']';
         var id   = 'odwpsp-action-param'  + aIndex;
 
         if( aParam.name == "api" ) {
@@ -51,12 +51,6 @@ jQuery( document ).ready( function( $ ) {
         }
         else if( aParam.name == "hash" ) {
             ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp1.defaults.hash_key + '" class="regular-text" disabled>';
-        }
-        /**
-         * @todo This is probably not needed.
-         */
-        else if( aParam.name == "domain" ) {
-            ret = '<input type="text" id="' + id + '" name="' + name + '" value="' + odwpsp1.defaults.domain + '" class="regular-text">';
         }
         else if( aParam.name == "list_id" ) {
             ret = odwpsp_create_list_id_select( id, name );

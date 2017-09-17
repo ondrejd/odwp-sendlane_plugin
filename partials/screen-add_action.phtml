@@ -52,13 +52,15 @@ endif;
 ?>
 <div class="wrap">
     <h1><?php _e( 'Přidat akci', 'odwp-sendlane_plugin' ) ?></h1>
+    <p><?php printf( __( 'Na této stránce můžete přidat akci dle <a href="%s" target="_blank">Sendlane API</a>, která se má provést na vybrané stránce. Akce vyžadují dodatečné parametry - ty mohou být buď dodány Vámi (správcem) nebo uživatelem. Více informací najdete v <strong>Nápovědě</strong> k této stránce.', 'odwp-sendlane_plugin' ), 'http://help.sendlane.com/knowledgebase/api-docs/' ) ?></p>
     <?php odwpsp_print_options_errors( $avail_lists ) ?>
     <?php odwpsp_print_options_errors( $avail_tags ) ?>
     <script type="text/javascript">
 /**
  * @param {String} aId
  * @param {String} aName
- * @returns {String} Returns <select> element for list_id.
+ * @return {String} Returns `select` element for list_id.
+ * @todo This should be moved to `assets/js/admin.js` file.
  */
 function odwpsp_create_list_id_select( aId, aName ) {
     var html = '';
@@ -79,7 +81,8 @@ function odwpsp_create_list_id_select( aId, aName ) {
 /**
  * @param {String} aId
  * @param {String} aName
- * @returns {String} Returns <select> element for tag_id.
+ * @returns {String} Returns `select` element for tag_id.
+ * @todo This should be moved to `assets/js/screen-add_action.js` file.
  */
 function odwpsp_create_tag_id_select( aId, aName ) {
     var html = '';
@@ -97,8 +100,9 @@ function odwpsp_create_tag_id_select( aId, aName ) {
     return html;
 }
     </script>
-    <form method="post" action="<?php echo admin_url( '?page=odwpsp_menu_add' ) ?>" novalidate="novalidate">
-        <input type="hidden" name="_wpnonce" value="">
+    <form action="admin.php" method="post">
+        <input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce()  ?>">
+        <input type="hidden" name="pg" value="<?php echo SP_Add_Action_Screen::SLUG ?>">
         <table class="form-table">
             <tbody>
                 <tr>
