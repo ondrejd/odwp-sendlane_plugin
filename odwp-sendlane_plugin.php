@@ -152,7 +152,7 @@ if( ! function_exists( 'odwpsp_error_log' ) ) :
      * @return void
      * @since 1.0.0
      */
-    function odwpsp_error_log( string $message, int $message_type = 0, string $destination = null, string $extra_headers = '' ) {
+    function odwpsp_error_log( string $message, $message_type = 0, $destination = null, $extra_headers = '' ) {
         if( ! file_exists( SP_LOG ) || ! is_writable( SP_LOG ) ) {
             return;
         }
